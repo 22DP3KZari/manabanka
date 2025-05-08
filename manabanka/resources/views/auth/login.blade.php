@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ManaBanka - Login</title>
+    <title>manaBanka - Login</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
     <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
         <div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Welcome to ManaBanka
+                Welcome to manaBanka
             </h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 Please sign in to your account
@@ -69,7 +69,7 @@
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm pr-10" 
                             placeholder="Password">
                         <button type="button" id="togglePassword" 
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none z-10">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -111,18 +111,6 @@
                 </p>
             </div>
         </form>
-
-        <div class="mt-6">
-            <div class="relative">
-                <div class="relative flex justify-center text-sm">
-                    <span class="px-2 bg-white text-gray-500">
-                        <a href="{{ route('password.request') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                            Forgot your password?
-                        </a>
-                    </span>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>

@@ -1,30 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ManaBanka - Dashboard</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>manaBanka - Dashboard</title>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100">
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <span class="text-2xl font-bold text-blue-600">ManaBanka</span>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="text-gray-700 mr-4">Welcome, {{ Auth::user()->name }}</span>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-gray-600 hover:text-gray-900">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.navigation')
 
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Account Overview -->
@@ -67,10 +52,9 @@
                         Apply for Loan
                         <span class="block text-sm text-gray-200">Coming Soon</span>
                     </button>
-                    <button class="bg-gray-600 text-white p-4 rounded-lg hover:bg-gray-700 transition cursor-not-allowed" disabled>
+                    <a href="{{ route('statements.index') }}" class="bg-gray-600 text-white p-4 rounded-lg hover:bg-gray-700 transition text-center">
                         View Statements
-                        <span class="block text-sm text-gray-200">Coming Soon</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

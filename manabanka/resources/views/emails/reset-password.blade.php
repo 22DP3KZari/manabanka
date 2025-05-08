@@ -32,7 +32,7 @@
     
     <p>Hello,</p>
     
-    <p>We received a request to reset your password for your ManaBanka account. Click the button below to reset your password:</p>
+    <p>We received a request to reset your password for your manaBanka account. Click the button below to reset your password:</p>
     
     <a href="{{ $actionUrl }}" class="button">Reset Password</a>
     

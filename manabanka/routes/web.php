@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\StatementController;
 
 // Redirect root to login if not authenticated
 Route::get('/', function () {
@@ -62,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transfers/create', [TransferController::class, 'showTransferForm'])->name('transfers.create');
     Route::post('/transfers', [TransferController::class, 'transfer'])->name('transfers.store');
     Route::get('/transfers/{transaction}', [TransferController::class, 'show'])->name('transfers.show');
+
+    // Statement routes
+    Route::get('/statements', [StatementController::class, 'index'])->name('statements.index');
 });
 
 // Admin Routes
