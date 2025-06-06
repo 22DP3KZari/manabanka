@@ -96,7 +96,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             abort(403, 'Unauthorized action.');
         }
         return app(DashboardController::class)->resetUserPassword($user, $request);
-    })->name('admin.users.reset-password');
+    })->name('users.reset-password');
 
     Route::delete('/users/{user}', function (User $user) {
         if (auth()->user()->role !== 'admin') {
