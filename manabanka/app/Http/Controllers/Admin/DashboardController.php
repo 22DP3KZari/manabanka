@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class DashboardController extends Controller
 {
@@ -80,16 +81,16 @@ class DashboardController extends Controller
             abort(403, 'Cannot reset admin user password.');
         }
 
-        $request->validate([
-            'new_password' => 'required|min:8|confirmed',
-        ]);
+        // Generate password reset token and send email
+        $status = Password::sendResetLink(['email' => $user->email]);
 
-        $user->forceFill([
-            'password' => Hash::make($request->new_password)
-        ])->save();
-
-        return redirect()->route('admin.users.show', $user)
-            ->with('success', 'Password has been reset successfully.');
+        if ($status === Password::RESET_LINK_SENT) {
+            return redirect()->route('admin.users.show', $user)
+                ->with('success', 'Password reset link has been sent to the user\'s email.');
+        } else {
+            return redirect()->route('admin.users.show', $user)
+                ->with('error', 'Unable to send password reset link. Please try again.');
+        }
     }
 
     public function transactions()

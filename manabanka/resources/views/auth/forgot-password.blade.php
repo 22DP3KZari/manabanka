@@ -20,8 +20,11 @@
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 @if (session('status'))
-                    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                        <span class="block sm:inline">{{ session('status') }}</span>
+                    <div class="mb-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                        <p class="font-medium">Password Reset Instructions:</p>
+                        <p class="mt-2 break-all bg-white p-2 rounded border border-blue-200">
+                            {{ session('status') }}
+                        </p>
                     </div>
                 @endif
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordResetMail;
+use App\Models\User;
 
 class ForgotPasswordController extends Controller
 {
@@ -21,12 +22,9 @@ class ForgotPasswordController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $token = Password::createToken(User::where('email', $request->email)->first());
+        $resetLink = url('/reset-password/' . $token . '?email=' . urlencode($request->email));
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+        return back()->with('status', 'Please copy and paste this link into a new browser tab to reset your password: ' . $resetLink);
     }
 } 
