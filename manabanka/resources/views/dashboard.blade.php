@@ -44,14 +44,12 @@
                     <a href="{{ route('transfers.create') }}" class="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition text-center">
                         Transfer Money
                     </a>
-                    <button class="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition cursor-not-allowed" disabled>
-                        Pay Bills
-                        <span class="block text-sm text-gray-200">Coming Soon</span>
-                    </button>
-                    <button class="bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition cursor-not-allowed" disabled>
-                        Apply for Loan
-                        <span class="block text-sm text-gray-200">Coming Soon</span>
-                    </button>
+                    <a href="{{ route('budget-planner.index') }}" class="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition text-center">
+                        Budget Planner
+                    </a>
+                    <a href="{{ route('budgets.index') }}" class="bg-yellow-600 text-white p-4 rounded-lg hover:bg-yellow-700 transition text-center">
+                        My Budgets
+                    </a>
                     <a href="{{ route('statements.index') }}" class="bg-gray-600 text-white p-4 rounded-lg hover:bg-gray-700 transition text-center">
                         View Statements
                     </a>

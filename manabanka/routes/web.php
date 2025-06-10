@@ -14,6 +14,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\StatementController;
+use App\Http\Controllers\BudgetPlannerController;
 
 // Redirect root to login if not authenticated
 Route::get('/', function () {
@@ -66,6 +67,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Statement routes
     Route::get('/statements', [StatementController::class, 'index'])->name('statements.index');
+
+    // Budget Planner routes
+    Route::get('/budget-planner', [BudgetPlannerController::class, 'index'])->name('budget-planner.index');
+    Route::post('/budget-planner/calculate', [\App\Http\Controllers\BudgetPlannerController::class, 'calculate'])->name('budget-planner.calculate');
+    Route::get('/budgets', [BudgetPlannerController::class, 'budgets'])->name('budgets.index');
+    Route::delete('/budgets/{budget}', [BudgetPlannerController::class, 'destroy'])->name('budgets.destroy');
+    Route::get('/budgets/{budget}', [BudgetPlannerController::class, 'show'])->name('budgets.show');
+    Route::get('/budgets/{budget}/edit', [BudgetPlannerController::class, 'edit'])->name('budgets.edit');
+    Route::patch('/budgets/{budget}', [BudgetPlannerController::class, 'update'])->name('budgets.update');
 });
 
 // Admin Routes

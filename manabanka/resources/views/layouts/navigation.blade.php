@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <span class="text-2xl font-bold text-blue-600">manaBanka</span>
+                        <span class="text-2xl font-bold text-blue-600" style="font-size: 1.5rem !important; font-weight: 700 !important;">manaBanka</span>
                     </a>
                 </div>
 

@@ -65,14 +65,14 @@
                                 <div class="mt-1">
                                     <input type="text" name="recipient_account" id="recipient_account" 
                                         class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                        placeholder="Enter 20-digit account number"
+                                        placeholder="Enter recipient's bank account number"
                                         value="{{ old('recipient_account') }}"
-                                        maxlength="20"
-                                        pattern="[0-9]{20}"
+                                        maxlength="34"
+                                        pattern="[A-Za-z0-9]+"
                                         required>
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Enter the 20-digit account number of the recipient
+                                    Enter the recipient's bank account number (e.g., LV36HABA0551047225371)
                                 </p>
                             </div>
 
@@ -139,7 +139,7 @@
         // Format account number input
         const accountInput = document.getElementById('recipient_account');
         accountInput.addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 20);
+            this.value = this.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 34);
         });
 
         // Format amount input
