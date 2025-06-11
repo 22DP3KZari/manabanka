@@ -24,6 +24,7 @@
 
 ### Front-end
 
+- Apache
 - CSS
 
 ## Uzstādīšana
