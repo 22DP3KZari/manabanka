@@ -44,12 +44,10 @@
             <div class="px-4 py-6 sm:px-0">
                 <div class="bg-white shadow rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">User Management</h3>
-                            <div class="flex space-x-3">
-                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Export Users
-                                </button>
+                        <div class="sm:flex sm:items-center">
+                            <div class="sm:flex-auto">
+                                <h1 class="text-xl font-semibold text-gray-900">Users</h1>
+                                <p class="mt-2 text-sm text-gray-700">A list of all users in the system including their name, email, and role.</p>
                             </div>
                         </div>
                         <div class="mt-4">

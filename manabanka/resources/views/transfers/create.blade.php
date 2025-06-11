@@ -148,6 +148,15 @@
             if (this.value < 0) this.value = 0;
             if (this.value > 10000) this.value = 10000;
         });
+
+        // Prevent numbers and special characters in recipient name
+        const recipientNameInput = document.getElementById('recipient_name');
+        recipientNameInput.addEventListener('keypress', function(e) {
+            // Only allow letters and spaces
+            if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html> 

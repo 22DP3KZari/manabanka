@@ -124,6 +124,17 @@
                         </div>
                     </div>
                 </div>
+
+                @if (session('success'))
+                    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <p class="font-medium">{{ session('success') }}</p>
+                        @if (session('resetLink'))
+                            <div class="mt-2 break-all bg-white p-2 rounded border border-green-200">
+                                {{ session('resetLink') }}
+                            </div>
+                        @endif
+                    </div>
+                @endif
             </div>
         </main>
     </div>
@@ -185,7 +196,7 @@
                                 </h3>
                                 <div class="mt-4">
                                     <p class="text-sm text-gray-500">
-                                        This will send a password reset link to {{ $user->email }}. The user will need to click the link in their email to set a new password.
+                                        This will generate a password reset link for {{ $user->email }}. You can copy and share this link with the user to allow them to set a new password.
                                     </p>
                                 </div>
                             </div>
@@ -193,7 +204,7 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Send Reset Link
+                            Generate Reset Link
                         </button>
                         <button type="button" onclick="closeResetPasswordModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\WelcomeController;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
@@ -16,14 +17,10 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\StatementController;
 use App\Http\Controllers\BudgetPlannerController;
 
-// Redirect root to login if not authenticated
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect('/dashboard');
-    }
-    return redirect('/login');
-});
+// Welcome page route
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
+// Contact page
 Route::get('/contact', function () {
     return view('contact');
 });
@@ -75,7 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/budgets/{budget}', [BudgetPlannerController::class, 'destroy'])->name('budgets.destroy');
     Route::get('/budgets/{budget}', [BudgetPlannerController::class, 'show'])->name('budgets.show');
     Route::get('/budgets/{budget}/edit', [BudgetPlannerController::class, 'edit'])->name('budgets.edit');
-    Route::patch('/budgets/{budget}', [BudgetPlannerController::class, 'update'])->name('budgets.update');
+    Route::put('/budgets/{budget}', [BudgetPlannerController::class, 'update'])->name('budgets.update');
 });
 
 // Admin Routes

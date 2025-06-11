@@ -44,7 +44,7 @@
                     </div>
                     @endif
                     <div class="flex justify-between items-center">
-                        <span class="font-medium">Other (Buffer)</span>
+                        <span class="font-medium">Other</span>
                         <span class="text-gray-600">${{ number_format($other, 2) }}</span>
                     </div>
                 </div>

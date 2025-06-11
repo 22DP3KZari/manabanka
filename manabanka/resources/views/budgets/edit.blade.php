@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Budget Plan - manaBanka')
+@section('title', 'Budget Planner - manaBanka')
 
 @section('content')
 <div class="max-w-2xl mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-6">Edit Budget Plan</h1>
-    <a href="{{ route('budgets.index') }}" class="mb-6 inline-block bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700">Back to My Budgets</a>
-    <form action="{{ route('budgets.update', $budget->id) }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow" id="budgetForm">
+    <h1 class="text-3xl font-bold mb-6">Budget Planner</h1>
+    <a href="{{ route('budgets.index') }}" class="mb-6 inline-block bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700">My Budgets</a>
+    <form action="{{ route('budgets.update', $budget) }}" method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow" id="budgetForm">
         @csrf
         @method('PUT')
         <div>
             <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
-            <input type="number" name="age" id="age" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your age" value="{{ old('age', $budget->age) }}">
+            <input type="number" name="age" id="age" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your age" value="{{ $budget->age }}">
         </div>
         <div>
             <label for="income" class="block text-sm font-medium text-gray-700">Monthly Income (€)</label>
-            <input type="number" step="0.01" name="income" id="income" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly income" value="{{ old('income', $budget->income) }}">
+            <input type="number" step="0.01" name="income" id="income" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly income" value="{{ $budget->income }}">
         </div>
 
         <!-- Total Expenses Display -->
@@ -37,31 +37,31 @@
             <div class="space-y-4">
                 <div>
                     <label for="housing" class="block text-sm font-medium text-gray-700">Housing (Rent/Mortgage) (€)</label>
-                    <input type="number" step="0.01" name="housing" id="housing" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly housing costs" value="{{ old('housing', $budget->detailed_expenses['housing'] ?? 0) }}">
+                    <input type="number" step="0.01" name="housing" id="housing" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly housing costs" value="{{ $budget->detailed_expenses['housing'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="utilities" class="block text-sm font-medium text-gray-700">Utilities (Electricity, Water, Internet) (€)</label>
-                    <input type="number" step="0.01" name="utilities" id="utilities" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly utilities costs" value="{{ old('utilities', $budget->detailed_expenses['utilities'] ?? 0) }}">
+                    <input type="number" step="0.01" name="utilities" id="utilities" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly utilities costs" value="{{ $budget->detailed_expenses['utilities'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="transportation" class="block text-sm font-medium text-gray-700">Transportation (Fuel, Public Transport) (€)</label>
-                    <input type="number" step="0.01" name="transportation" id="transportation" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly transportation costs" value="{{ old('transportation', $budget->detailed_expenses['transportation'] ?? 0) }}">
+                    <input type="number" step="0.01" name="transportation" id="transportation" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly transportation costs" value="{{ $budget->detailed_expenses['transportation'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="groceries" class="block text-sm font-medium text-gray-700">Groceries (€)</label>
-                    <input type="number" step="0.01" name="groceries" id="groceries" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly grocery expenses" value="{{ old('groceries', $budget->detailed_expenses['groceries'] ?? 0) }}">
+                    <input type="number" step="0.01" name="groceries" id="groceries" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly grocery expenses" value="{{ $budget->detailed_expenses['groceries'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="insurance" class="block text-sm font-medium text-gray-700">Insurance (Health, Car, etc.) (€)</label>
-                    <input type="number" step="0.01" name="insurance" id="insurance" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly insurance costs" value="{{ old('insurance', $budget->detailed_expenses['insurance'] ?? 0) }}">
+                    <input type="number" step="0.01" name="insurance" id="insurance" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly insurance costs" value="{{ $budget->detailed_expenses['insurance'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="loan_payments" class="block text-sm font-medium text-gray-700">Loan Payments (excluding mortgage) (€)</label>
-                    <input type="number" step="0.01" name="loan_payments" id="loan_payments" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly loan payments" value="{{ old('loan_payments', $budget->detailed_expenses['loan_payments'] ?? 0) }}">
+                    <input type="number" step="0.01" name="loan_payments" id="loan_payments" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly loan payments" value="{{ $budget->detailed_expenses['loan_payments'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="personal_care" class="block text-sm font-medium text-gray-700">Personal Care (Haircuts, etc.) (€)</label>
-                    <input type="number" step="0.01" name="personal_care" id="personal_care" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly personal care expenses" value="{{ old('personal_care', $budget->detailed_expenses['personal_care'] ?? 0) }}">
+                    <input type="number" step="0.01" name="personal_care" id="personal_care" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required min="0" placeholder="Enter your monthly personal care expenses" value="{{ $budget->detailed_expenses['personal_care'] ?? 0 }}">
                 </div>
             </div>
         </div>
@@ -73,23 +73,23 @@
             <div class="space-y-4">
                 <div>
                     <label for="dining_out" class="block text-sm font-medium text-gray-700">Dining Out (€)</label>
-                    <input type="number" step="0.01" name="dining_out" id="dining_out" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly dining out expenses" value="{{ old('dining_out', $budget->detailed_expenses['dining_out'] ?? 0) }}">
+                    <input type="number" step="0.01" name="dining_out" id="dining_out" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly dining out expenses" value="{{ $budget->detailed_expenses['dining_out'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="shopping" class="block text-sm font-medium text-gray-700">Shopping (€)</label>
-                    <input type="number" step="0.01" name="shopping" id="shopping" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly shopping expenses" value="{{ old('shopping', $budget->detailed_expenses['shopping'] ?? 0) }}">
+                    <input type="number" step="0.01" name="shopping" id="shopping" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly shopping expenses" value="{{ $budget->detailed_expenses['shopping'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="entertainment" class="block text-sm font-medium text-gray-700">Entertainment (€)</label>
-                    <input type="number" step="0.01" name="entertainment" id="entertainment" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly entertainment expenses" value="{{ old('entertainment', $budget->detailed_expenses['entertainment'] ?? 0) }}">
+                    <input type="number" step="0.01" name="entertainment" id="entertainment" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly entertainment expenses" value="{{ $budget->detailed_expenses['entertainment'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="subscriptions" class="block text-sm font-medium text-gray-700">Subscriptions (Netflix, Gym, etc.) (€)</label>
-                    <input type="number" step="0.01" name="subscriptions" id="subscriptions" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly subscription costs" value="{{ old('subscriptions', $budget->detailed_expenses['subscriptions'] ?? 0) }}">
+                    <input type="number" step="0.01" name="subscriptions" id="subscriptions" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly subscription costs" value="{{ $budget->detailed_expenses['subscriptions'] ?? 0 }}">
                 </div>
                 <div>
                     <label for="miscellaneous" class="block text-sm font-medium text-gray-700">Miscellaneous (Unexpected or small expenses) (€)</label>
-                    <input type="number" step="0.01" name="miscellaneous" id="miscellaneous" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly miscellaneous expenses" value="{{ old('miscellaneous', $budget->detailed_expenses['miscellaneous'] ?? 0) }}">
+                    <input type="number" step="0.01" name="miscellaneous" id="miscellaneous" class="expense-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" required min="0" placeholder="Enter your monthly miscellaneous expenses" value="{{ $budget->detailed_expenses['miscellaneous'] ?? 0 }}">
                 </div>
             </div>
         </div>
@@ -100,25 +100,25 @@
             <div class="space-y-4">
                 <div>
                     <label for="dependents" class="block text-sm font-medium text-gray-700">Number of Dependents</label>
-                    <input type="number" name="dependents" id="dependents" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500" required min="0" placeholder="Enter number of dependents" value="{{ old('dependents', $budget->dependents) }}">
+                    <input type="number" name="dependents" id="dependents" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500" required min="0" placeholder="Enter number of dependents" value="{{ $budget->dependents }}">
                 </div>
                 <div>
                     <label for="debt" class="block text-sm font-medium text-gray-700">Do you have significant debt?</label>
                     <select name="debt" id="debt" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500" required>
                         <option value="">Select an option</option>
-                        <option value="no" {{ old('debt', $budget->debt) == 'no' ? 'selected' : '' }}>No</option>
-                        <option value="yes" {{ old('debt', $budget->debt) == 'yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="no" {{ $budget->debt === 'no' ? 'selected' : '' }}>No</option>
+                        <option value="yes" {{ $budget->debt === 'yes' ? 'selected' : '' }}>Yes</option>
                     </select>
                 </div>
                 <div>
                     <label for="goal" class="block text-sm font-medium text-gray-700">Main Financial Goal</label>
                     <select name="goal" id="goal" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500" required>
                         <option value="">Select your main goal</option>
-                        <option value="retirement" {{ old('goal', $budget->goal) == 'retirement' ? 'selected' : '' }}>Save for retirement</option>
-                        <option value="house" {{ old('goal', $budget->goal) == 'house' ? 'selected' : '' }}>Buy a house</option>
-                        <option value="debt" {{ old('goal', $budget->goal) == 'debt' ? 'selected' : '' }}>Pay off debt</option>
-                        <option value="emergency" {{ old('goal', $budget->goal) == 'emergency' ? 'selected' : '' }}>Build emergency fund</option>
-                        <option value="other" {{ old('goal', $budget->goal) == 'other' ? 'selected' : '' }}>Other</option>
+                        <option value="retirement" {{ $budget->goal === 'retirement' ? 'selected' : '' }}>Save for retirement</option>
+                        <option value="house" {{ $budget->goal === 'house' ? 'selected' : '' }}>Buy a house</option>
+                        <option value="debt" {{ $budget->goal === 'debt' ? 'selected' : '' }}>Pay off debt</option>
+                        <option value="emergency" {{ $budget->goal === 'emergency' ? 'selected' : '' }}>Build emergency fund</option>
+                        <option value="other" {{ $budget->goal === 'other' ? 'selected' : '' }}>Other</option>
                     </select>
                 </div>
             </div>
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // When input loses focus
         input.addEventListener('blur', function() {
             if (this.value === '') {
-                this.value = '0';
+                this.value = ''; // Leave empty for user to fill, or change to '0' if preferred
             }
         });
 

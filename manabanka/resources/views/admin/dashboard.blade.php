@@ -63,7 +63,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
                 <!-- Recent Transactions -->
                 <div class="bg-white shadow rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
@@ -84,36 +84,6 @@
                                             </div>
                                             <div class="text-sm text-gray-500">
                                                 €{{ number_format($transaction->amount, 2) }}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Suspicious Activity -->
-                <div class="bg-white shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Suspicious Activity</h3>
-                        <div class="mt-4">
-                            <div class="flow-root">
-                                <ul class="-my-5 divide-y divide-gray-200">
-                                    @foreach($stats['suspicious_activity'] as $transaction)
-                                    <li class="py-4">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-900 truncate">
-                                                    {{ $transaction->user->name }}
-                                                </p>
-                                                <p class="text-sm text-gray-500">
-                                                    Large transaction: €{{ number_format($transaction->amount, 2) }}
-                                                </p>
-                                            </div>
-                                            <div class="text-sm text-red-500">
-                                                {{ $transaction->created_at->diffForHumans() }}
                                             </div>
                                         </div>
                                     </li>

@@ -81,16 +81,13 @@ class DashboardController extends Controller
             abort(403, 'Cannot reset admin user password.');
         }
 
-        // Generate password reset token and send email
-        $status = Password::sendResetLink(['email' => $user->email]);
+        // Generate password reset token
+        $token = Password::createToken($user);
+        $resetLink = url('/reset-password/' . $token . '?email=' . urlencode($user->email));
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return redirect()->route('admin.users.show', $user)
-                ->with('success', 'Password reset link has been sent to the user\'s email.');
-        } else {
-            return redirect()->route('admin.users.show', $user)
-                ->with('error', 'Unable to send password reset link. Please try again.');
-        }
+        return redirect()->route('admin.users.show', $user)
+            ->with('success', 'Password reset link generated successfully. Please copy and share this link with the user:')
+            ->with('resetLink', $resetLink);
     }
 
     public function transactions()
