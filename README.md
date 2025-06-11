@@ -54,16 +54,4 @@ cd frontend
 npm install
 npm run dev
 ```
-
-## Izstrādes statuss
-
-- [ ] Lietotāja reģistrācija un autorizācija
-- [ ] Ienākumu un izdevumu pievienošana
-- [ ] Kategoriju pārvaldība
-- [ ] Bilances aprēķins
-- [ ] Statistikas un grafiku ģenerēšana
-- [ ] Datu eksportēšana
-- [ ] Atgriezeniskā saite un ieteikumi
-- [ ] Mobilā dizaina pielāgošana
-
 ---
