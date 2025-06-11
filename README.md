@@ -15,18 +15,6 @@
 - Datu eksportēšana
 - Drošības un privātuma aizsardzība
 
-## Izmantotās tehnoloģijas
-
-### Back-end
-
-- Laravel Framework
-- MySQL
-
-### Front-end
-
-- Apache
-- CSS
-
 ## Uzstādīšana
 
 ### Prasības
