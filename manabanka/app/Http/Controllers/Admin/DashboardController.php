@@ -28,7 +28,6 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get(),
-            'suspicious_activity' => $this->getSuspiciousActivity(),
             'daily_transactions' => $this->getDailyTransactionStats(),
         ];
 

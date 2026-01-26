@@ -11,6 +11,7 @@ class Budget extends Model
 
     protected $fillable = [
         'user_id',
+        'name',
         'age',
         'income',
         'fixed_expenses',
@@ -31,4 +32,9 @@ class Budget extends Model
         'savings' => 'decimal:2',
         'other' => 'decimal:2',
     ];
+
+    public function categoryBudgets()
+    {
+        return $this->hasMany(CategoryBudget::class);
+    }
 } 

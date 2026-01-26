@@ -202,7 +202,6 @@
         </ul>
     </aside>
     <footer>
-        <p>&copy; 2024 manaBanka. Visas tiesības aizsargātas.</p>
         <p>Pieseko mums 
             <a href="https://facebook.com">Facebook</a>, 
             <a href="https://x.com/theeuropeanlad">X</a>, 

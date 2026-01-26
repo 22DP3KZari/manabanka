@@ -1,192 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>manaBanka - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Create your account
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Join manaBanka today
-            </p>
-        </div>
+<body class="min-h-screen flex flex-col font-sans bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <!-- Logo in top-left -->
+    <div class="absolute top-6 left-6 z-10">
+        <a href="/" class="flex items-center space-x-2">
+            <span class="text-2xl font-bold text-white">manaBanka</span>
+        </a>
+    </div>
 
-        @if ($errors->any())
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">
-                            @foreach ($errors->all() as $error)
-                                {{ $error }}<br>
-                            @endforeach
-                        </p>
-                    </div>
+    <!-- Footer -->
+    <div class="absolute bottom-6 left-6 z-10">
+        <div class="relative">
+            <button id="languageToggle" class="flex items-center space-x-1 text-gray-400 hover:text-white transition-colors text-sm focus:outline-none">
+                <span>{{ app()->getLocale() === 'lv' ? __('common.latvian') : __('common.english') }}</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <!-- Dropdown menu -->
+            <div id="languageDropdown" class="absolute bottom-full left-0 mb-1 hidden">
+                <div class="bg-slate-800/95 backdrop-blur-sm border border-slate-700 rounded-lg shadow-lg overflow-hidden min-w-[160px]">
+                    <a href="{{ route('lang.switch', 'en') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition-colors {{ app()->getLocale() === 'en' ? 'bg-slate-700 text-white' : '' }}">
+                        {{ __('common.english') }}
+                    </a>
+                    <a href="{{ route('lang.switch', 'lv') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition-colors {{ app()->getLocale() === 'lv' ? 'bg-slate-700 text-white' : '' }}">
+                        {{ __('common.latvian') }}
+                    </a>
                 </div>
             </div>
-        @endif
+        </div>
+    </div>
 
-        <!-- Caps Lock Warning -->
-        <div id="capsLockWarning" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-yellow-700">
-                        Caps Lock is on
+    <div class="flex-1 flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md space-y-6">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-white mb-1.5">{{ __('common.create_account') }}</h1>
+                <p class="text-gray-400 text-sm">{{ __('common.join_subtitle') }}</p>
+            </div>
+
+            @if ($errors->any())
+                <div class="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-4">
+                    <p class="text-sm text-red-300 text-center">
+                        @foreach ($errors->all() as $error)
+                            {{ $error }}
+                        @endforeach
                     </p>
                 </div>
-            </div>
+            @endif
+
+            <form class="space-y-4" action="{{ route('register') }}" method="POST">
+                @csrf
+                
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <input id="first_name" name="first_name" type="text" required 
+                                minlength="2"
+                                maxlength="50"
+                                pattern="[\p{L}\s\-\'\.]+"
+                                title="First name must be 2-50 characters and can only contain letters, spaces, hyphens, apostrophes, and dots"
+                                class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('first_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                                placeholder="{{ __('common.first_name') }}"
+                                value="{{ old('first_name') }}">
+                            @error('first_name')
+                                <p class="mt-1 text-xs text-red-300 text-center">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <input id="last_name" name="last_name" type="text" required 
+                                minlength="2"
+                                maxlength="50"
+                                pattern="[\p{L}\s\-\'\.]+"
+                                title="Last name must be 2-50 characters and can only contain letters, spaces, hyphens, apostrophes, and dots"
+                                class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('last_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                                placeholder="{{ __('common.last_name') }}"
+                                value="{{ old('last_name') }}">
+                            @error('last_name')
+                                <p class="mt-1 text-xs text-red-300 text-center">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <input id="email" name="email" type="email" required 
+                            class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('email') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            placeholder="{{ __('common.email_address') }}"
+                            value="{{ old('email') }}">
+                        @error('email')
+                            <p class="mt-1 text-xs text-red-300 text-center">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <div class="relative">
+                        <input id="password" name="password" type="password" required 
+                            class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            placeholder="{{ __('common.create_password') }}">
+                        <!-- Caps Lock Warning - Clean inline indicator -->
+                        <div id="capsLockWarning" class="hidden absolute right-10 top-1/2 -translate-y-1/2">
+                            <div class="flex items-center space-x-1 text-gray-400">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <span class="text-xs font-medium">{{ __('common.caps_lock') }}</span>
+                            </div>
+                        </div>
+                        <!-- Password visibility toggle -->
+                        <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors focus:outline-none">
+                            <svg id="eyeOpen" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <svg id="eyeClosed" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.29 3.29m13.42 13.42l-3.29-3.29M3 3l18 18" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="relative">
+                        <input id="password_confirmation" name="password_confirmation" type="password" required 
+                            class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            placeholder="{{ __('common.confirm_password') }}">
+                        <!-- Caps Lock Warning - Clean inline indicator -->
+                        <div id="capsLockWarningConfirm" class="hidden absolute right-10 top-1/2 -translate-y-1/2">
+                            <div class="flex items-center space-x-1 text-gray-400">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <span class="text-xs font-medium">{{ __('common.caps_lock') }}</span>
+                            </div>
+                        </div>
+                        <!-- Password visibility toggle -->
+                        <button type="button" id="togglePasswordConfirm" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors focus:outline-none">
+                            <svg id="eyeOpenConfirm" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <svg id="eyeClosedConfirm" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.29 3.29m13.42 13.42l-3.29-3.29M3 3l18 18" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Password Strength Indicator -->
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-medium text-gray-300">{{ __('common.password_strength') }}</span>
+                        <span id="passwordStrength" class="text-xs font-medium text-gray-300" data-too-weak="{{ __('common.password_too_weak') }}" data-weak="{{ __('common.password_weak') }}" data-fair="{{ __('common.password_fair') }}" data-good="{{ __('common.password_good') }}" data-strong="{{ __('common.password_strong') }}">{{ __('common.password_too_weak') }}</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-1.5">
+                        <div id="passwordStrengthBar" class="h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <ul class="mt-2 text-xs text-gray-400 space-y-1">
+                        <li id="lengthCheck" class="flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {{ __('common.password_length') }}
+                        </li>
+                        <li id="uppercaseCheck" class="flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {{ __('common.password_uppercase') }}
+                        </li>
+                        <li id="lowercaseCheck" class="flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {{ __('common.password_lowercase') }}
+                        </li>
+                        <li id="numberCheck" class="flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {{ __('common.password_number') }}
+                        </li>
+                        <li id="specialCheck" class="flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {{ __('common.password_special') }}
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full py-2.5 bg-revolut-purple hover:bg-revolut-purple-dark text-white font-medium rounded-lg transition-all duration-200 text-sm shadow-md shadow-revolut-purple/20 hover:shadow-revolut-purple/30 hover:scale-[1.02]">
+                        {{ __('common.create_account') }}
+                    </button>
+                </div>
+
+                <div class="text-xs text-center">
+                    <a href="{{ route('login') }}" class="text-revolut-purple hover:text-revolut-purple-light transition-colors">
+                        {{ __('common.have_account') }}
+                    </a>
+                </div>
+            </form>
         </div>
-
-        <form class="mt-8 space-y-6" action="{{ route('register') }}" method="POST">
-            @csrf
-            <div class="rounded-md shadow-sm -space-y-px">
-                <div>
-                    <label for="name" class="sr-only">Full Name</label>
-                    <input id="name" name="name" type="text" required 
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                        placeholder="Full Name"
-                        value="{{ old('name') }}">
-                </div>
-                <div>
-                    <label for="email" class="sr-only">Email address</label>
-                    <input id="email" name="email" type="email" required 
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                        placeholder="Email address"
-                        value="{{ old('email') }}">
-                </div>
-                <div class="relative">
-                    <label for="password" class="sr-only">Password</label>
-                    <input id="password" name="password" type="password" required 
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                        placeholder="Password">
-                    <button type="button" id="togglePassword" 
-                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="relative">
-                    <label for="password_confirmation" class="sr-only">Confirm Password</label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" required 
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                        placeholder="Confirm Password">
-                    <button type="button" id="togglePasswordConfirmation" 
-                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Password Strength Indicator -->
-            <div class="mt-2">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-medium text-gray-700">Password Strength:</span>
-                    <span id="passwordStrength" class="text-sm font-medium">Too weak</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div id="passwordStrengthBar" class="h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-                <ul class="mt-2 text-sm text-gray-600 space-y-1">
-                    <li id="lengthCheck" class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        At least 8 characters
-                    </li>
-                    <li id="uppercaseCheck" class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        One uppercase letter
-                    </li>
-                    <li id="lowercaseCheck" class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        One lowercase letter
-                    </li>
-                    <li id="numberCheck" class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        One number
-                    </li>
-                    <li id="specialCheck" class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        One special character
-                    </li>
-                </ul>
-            </div>
-
-            <div>
-                <button type="submit" 
-                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Create Account
-                </button>
-            </div>
-
-            <div class="text-sm text-center">
-                <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                    Already have an account? Sign in
-                </a>
-            </div>
-        </form>
     </div>
 
     <script>
-        // Password visibility toggle
-        function setupPasswordToggle(inputId, buttonId) {
-            const toggleButton = document.querySelector(buttonId);
-            const input = document.querySelector(inputId);
+        // Password visibility toggles
+        const passwordInput = document.querySelector('#password');
+        const passwordConfirmInput = document.querySelector('#password_confirmation');
+        const togglePassword = document.querySelector('#togglePassword');
+        const togglePasswordConfirm = document.querySelector('#togglePasswordConfirm');
+        const eyeOpen = document.querySelector('#eyeOpen');
+        const eyeClosed = document.querySelector('#eyeClosed');
+        const eyeOpenConfirm = document.querySelector('#eyeOpenConfirm');
+        const eyeClosedConfirm = document.querySelector('#eyeClosedConfirm');
 
-            toggleButton.addEventListener('click', function (e) {
-                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                input.setAttribute('type', type);
-                
-                this.querySelector('svg').innerHTML = type === 'password' 
-                    ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />'
-                    : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                eyeOpen.classList.toggle('hidden');
+                eyeClosed.classList.toggle('hidden');
             });
         }
 
-        setupPasswordToggle('#password', '#togglePassword');
-        setupPasswordToggle('#password_confirmation', '#togglePasswordConfirmation');
-
-        // Caps Lock warning
-        const capsLockWarning = document.querySelector('#capsLockWarning');
-        const passwordInputs = document.querySelectorAll('input[type="password"]');
-
-        passwordInputs.forEach(input => {
-            input.addEventListener('keyup', function(e) {
-                if (e.getModifierState('CapsLock')) {
-                    capsLockWarning.classList.remove('hidden');
-                } else {
-                    capsLockWarning.classList.add('hidden');
-                }
+        if (togglePasswordConfirm && passwordConfirmInput) {
+            togglePasswordConfirm.addEventListener('click', function() {
+                const type = passwordConfirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordConfirmInput.setAttribute('type', type);
+                eyeOpenConfirm.classList.toggle('hidden');
+                eyeClosedConfirm.classList.toggle('hidden');
             });
-        });
+        }
+
+        // Caps Lock warning - improved detection
+        const capsLockWarning = document.querySelector('#capsLockWarning');
+        const capsLockWarningConfirm = document.querySelector('#capsLockWarningConfirm');
+
+        function setupCapsLockWarning(input, warningElement) {
+            if (input && warningElement) {
+                function checkCapsLock(e) {
+                    if (e && typeof e.getModifierState === 'function') {
+                        const isCapsLockOn = e.getModifierState('CapsLock');
+                        if (isCapsLockOn) {
+                            warningElement.classList.remove('hidden');
+                        } else {
+                            warningElement.classList.add('hidden');
+                        }
+                    }
+                }
+
+                // Check on every keydown and keyup
+                input.addEventListener('keydown', checkCapsLock);
+                input.addEventListener('keyup', checkCapsLock);
+                
+                // Also check when caps lock key is pressed
+                document.addEventListener('keydown', function(e) {
+                    if (document.activeElement === input) {
+                        if (e.key === 'CapsLock' || e.keyCode === 20 || e.code === 'CapsLock') {
+                            // Check after a short delay to allow state to update
+                            setTimeout(function() {
+                                // Trigger a check by creating a synthetic event
+                                const syntheticEvent = {
+                                    getModifierState: function(key) {
+                                        if (key === 'CapsLock') {
+                                            // We can't directly check, but the next real keypress will show it
+                                            return false;
+                                        }
+                                        return false;
+                                    }
+                                };
+                                checkCapsLock(syntheticEvent);
+                            }, 10);
+                        }
+                    }
+                });
+            }
+        }
+
+        setupCapsLockWarning(passwordInput, capsLockWarning);
+        setupCapsLockWarning(passwordConfirmInput, capsLockWarningConfirm);
 
         // Password strength indicator
         const password = document.querySelector('#password');
@@ -215,8 +313,8 @@
                 check.querySelector('svg').innerHTML = passed
                     ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />'
                     : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
-                check.classList.toggle('text-green-600', passed);
-                check.classList.toggle('text-gray-600', !passed);
+                check.classList.toggle('text-green-400', passed);
+                check.classList.toggle('text-gray-400', !passed);
             });
 
             // Calculate strength
@@ -229,25 +327,50 @@
             // Update colors and text
             if (strengthPercent <= 20) {
                 strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-red-500';
-                strengthText.textContent = 'Too weak';
+                strengthText.textContent = strengthText.getAttribute('data-too-weak');
             } else if (strengthPercent <= 40) {
                 strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-orange-500';
-                strengthText.textContent = 'Weak';
+                strengthText.textContent = strengthText.getAttribute('data-weak');
             } else if (strengthPercent <= 60) {
                 strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-yellow-500';
-                strengthText.textContent = 'Fair';
+                strengthText.textContent = strengthText.getAttribute('data-fair');
             } else if (strengthPercent <= 80) {
                 strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-blue-500';
-                strengthText.textContent = 'Good';
+                strengthText.textContent = strengthText.getAttribute('data-good');
             } else {
                 strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-green-500';
-                strengthText.textContent = 'Strong';
+                strengthText.textContent = strengthText.getAttribute('data-strong');
             }
         }
 
         password.addEventListener('input', (e) => {
             updatePasswordStrength(e.target.value);
         });
+
+        // Language dropdown toggle
+        const languageToggle = document.getElementById('languageToggle');
+        const languageDropdown = document.getElementById('languageDropdown');
+
+        if (languageToggle && languageDropdown) {
+            languageToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking on language links (use event delegation)
+            languageDropdown.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' || e.target.closest('a')) {
+                    languageDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!languageToggle.contains(e.target) && !languageDropdown.contains(e.target)) {
+                    languageDropdown.classList.add('hidden');
+                }
+            });
+        }
     </script>
 </body>
 </html> 

@@ -11,6 +11,7 @@ class Spending extends Model
 
     protected $fillable = [
         'user_id',
+        'budget_id',
         'category',
         'amount',
         'date',
@@ -25,5 +26,10 @@ class Spending extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
     }
 } 

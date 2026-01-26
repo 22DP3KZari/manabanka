@@ -1,145 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>manaBanka - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Welcome to manaBanka
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Please sign in to your account
-            </p>
-        </div>
+<body class="min-h-screen flex flex-col font-sans bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <!-- Logo in top-left -->
+    <div class="absolute top-6 left-6 z-10">
+        <a href="/" class="flex items-center space-x-2">
+            <span class="text-2xl font-bold text-white">manaBanka</span>
+        </a>
+    </div>
 
-        @if ($errors->any())
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">
-                            @foreach ($errors->all() as $error)
-                                {{ $error }}<br>
-                            @endforeach
-                        </p>
-                    </div>
+    <!-- Footer -->
+    <div class="absolute bottom-6 left-6 z-10">
+        <div class="relative">
+            <button id="languageToggle" class="flex items-center space-x-1 text-gray-400 hover:text-white transition-colors text-sm focus:outline-none">
+                <span>{{ app()->getLocale() === 'lv' ? __('common.latvian') : __('common.english') }}</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <!-- Dropdown menu -->
+            <div id="languageDropdown" class="absolute bottom-full left-0 mb-1 hidden">
+                <div class="bg-slate-800/95 backdrop-blur-sm border border-slate-700 rounded-lg shadow-lg overflow-hidden min-w-[160px]">
+                    <a href="{{ route('lang.switch', 'en') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition-colors {{ app()->getLocale() === 'en' ? 'bg-slate-700 text-white' : '' }}">
+                        {{ __('common.english') }}
+                    </a>
+                    <a href="{{ route('lang.switch', 'lv') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition-colors {{ app()->getLocale() === 'lv' ? 'bg-slate-700 text-white' : '' }}">
+                        {{ __('common.latvian') }}
+                    </a>
                 </div>
             </div>
-        @endif
+        </div>
+    </div>
 
-        <!-- Caps Lock Warning -->
-        <div id="capsLockWarning" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-yellow-700">
-                        Caps Lock is on
+    <div class="flex-1 flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md space-y-6">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-white mb-6">{{ __('common.enter_passcode') }}</h1>
+                
+                <!-- User identification (if email is remembered) -->
+                @if(old('email'))
+                    <div class="flex items-center justify-center space-x-3 mb-5">
+                        <div class="w-9 h-9 rounded-full bg-revolut-purple flex items-center justify-center text-white font-semibold text-base">
+                            {{ strtoupper(substr(old('email'), 0, 1)) }}
+                        </div>
+                        <div class="text-left">
+                            <p class="text-white font-medium text-base">{{ old('email') }}</p>
+                            <a href="#" class="text-revolut-purple hover:text-revolut-purple-light text-sm transition-colors">{{ __('common.not_you') }}</a>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            @if ($errors->any())
+                <div class="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-4">
+                    <p class="text-sm text-red-300 text-center">
+                        @foreach ($errors->all() as $error)
+                            {{ $error }}
+                        @endforeach
                     </p>
                 </div>
-            </div>
-        </div>
+            @endif
 
-        <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST">
-            @csrf
-            <div class="rounded-md shadow-sm -space-y-px">
-                <div>
-                    <label for="email" class="sr-only">Email address</label>
-                    <input id="email" name="email" type="email" required 
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                        placeholder="Email address"
-                        value="{{ old('email') }}">
-                </div>
-                <div class="relative">
-                    <label for="password" class="sr-only">Password</label>
-                    <div class="relative">
-                        <input id="password" name="password" type="password" required 
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm pr-10" 
-                            placeholder="Password">
-                        <button type="button" id="togglePassword" 
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none z-10">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
+            <form class="space-y-4" action="{{ route('login') }}" method="POST">
+                @csrf
+                
+                @if(!old('email'))
+                    <div>
+                        <input id="email" name="email" type="email" required 
+                            class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            placeholder="{{ __('common.email_address') }}"
+                            value="{{ old('email') }}">
                     </div>
-                </div>
-            </div>
+                @else
+                    <input type="hidden" name="email" value="{{ old('email') }}">
+                @endif
 
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input id="remember_me" name="remember" type="checkbox" 
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                    <label for="remember_me" class="ml-2 block text-sm text-gray-900">
-                        Remember me
-                    </label>
+                <div class="relative">
+                    <input id="password" name="password" type="password" required 
+                        class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                        placeholder="{{ __('common.password') }}"
+                        autofocus>
+                    <!-- Caps Lock Warning - Clean inline indicator -->
+                    <div id="capsLockWarning" class="hidden absolute right-10 top-1/2 -translate-y-1/2">
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <span class="text-xs font-medium">{{ __('common.caps_lock') }}</span>
+                        </div>
+                    </div>
+                    <!-- Password visibility toggle -->
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors focus:outline-none">
+                        <svg id="eyeOpen" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <svg id="eyeClosed" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.29 3.29m13.42 13.42l-3.29-3.29M3 3l18 18" />
+                        </svg>
+                    </button>
                 </div>
 
-                <div class="text-sm">
-                    <a href="{{ route('password.request') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                        Forgot your password?
+                <div class="text-center">
+                    <a href="{{ route('password.request') }}" class="text-revolut-purple hover:text-revolut-purple-light text-sm transition-colors">
+                        {{ __('common.forgot_passcode') }}
                     </a>
                 </div>
-            </div>
 
-            <div>
-                <button type="submit" 
-                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Sign in
-                </button>
-            </div>
+                <div>
+                    <button type="submit" class="w-full py-2.5 bg-revolut-purple hover:bg-revolut-purple-dark text-white font-medium rounded-lg transition-all duration-200 text-sm shadow-md shadow-revolut-purple/20 hover:shadow-revolut-purple/30 hover:scale-[1.02]">
+                        {{ __('common.continue') }}
+                    </button>
+                </div>
 
-            <div class="text-sm text-center">
-                <p class="text-gray-600">
-                    Don't have an account? 
-                    <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                        Register here
-                    </a>
-                </p>
-            </div>
-        </form>
+                <div class="text-center">
+                    <p class="text-gray-400 text-sm">
+                        {{ __('common.no_account') }} 
+                        <a href="{{ route('register') }}" class="text-revolut-purple hover:text-revolut-purple-light transition-colors">
+                            {{ __('common.register_here') }}
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
     </div>
 
     <script>
         // Password visibility toggle
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
-
-        togglePassword.addEventListener('click', function (e) {
-            // toggle the type attribute
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            
-            // toggle the eye icon
-            this.querySelector('svg').innerHTML = type === 'password' 
-                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />'
-                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
-        });
-
-        // Caps Lock warning
-        const capsLockWarning = document.querySelector('#capsLockWarning');
         const passwordInput = document.querySelector('#password');
+        const togglePassword = document.querySelector('#togglePassword');
+        const eyeOpen = document.querySelector('#eyeOpen');
+        const eyeClosed = document.querySelector('#eyeClosed');
 
-        passwordInput.addEventListener('keyup', function(e) {
-            if (e.getModifierState('CapsLock')) {
-                capsLockWarning.classList.remove('hidden');
-            } else {
-                capsLockWarning.classList.add('hidden');
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                eyeOpen.classList.toggle('hidden');
+                eyeClosed.classList.toggle('hidden');
+            });
+        }
+
+        // Caps Lock warning - improved detection
+        const capsLockWarning = document.querySelector('#capsLockWarning');
+
+        if (passwordInput && capsLockWarning) {
+            function checkCapsLock(e) {
+                if (e && typeof e.getModifierState === 'function') {
+                    const isCapsLockOn = e.getModifierState('CapsLock');
+                    if (isCapsLockOn) {
+                        capsLockWarning.classList.remove('hidden');
+                    } else {
+                        capsLockWarning.classList.add('hidden');
+                    }
+                }
             }
-        });
+
+            // Check on every keydown and keyup
+            passwordInput.addEventListener('keydown', checkCapsLock);
+            passwordInput.addEventListener('keyup', checkCapsLock);
+            
+            // Also check when caps lock key is pressed
+            document.addEventListener('keydown', function(e) {
+                if (document.activeElement === passwordInput) {
+                    if (e.key === 'CapsLock' || e.keyCode === 20 || e.code === 'CapsLock') {
+                        // Check after a short delay to allow state to update
+                        setTimeout(function() {
+                            // Trigger a check by creating a synthetic event
+                            const syntheticEvent = {
+                                getModifierState: function(key) {
+                                    if (key === 'CapsLock') {
+                                        // We can't directly check, but the next real keypress will show it
+                                        return false;
+                                    }
+                                    return false;
+                                }
+                            };
+                            checkCapsLock(syntheticEvent);
+                        }, 10);
+                    }
+                }
+            });
+        }
+
+        // Language dropdown toggle
+        const languageToggle = document.getElementById('languageToggle');
+        const languageDropdown = document.getElementById('languageDropdown');
+
+        if (languageToggle && languageDropdown) {
+            languageToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking on language links (use event delegation)
+            languageDropdown.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' || e.target.closest('a')) {
+                    languageDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!languageToggle.contains(e.target) && !languageDropdown.contains(e.target)) {
+                    languageDropdown.classList.add('hidden');
+                }
+            });
+        }
     </script>
 </body>
 </html> 

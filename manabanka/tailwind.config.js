@@ -12,7 +12,27 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', 'Figtree', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                revolut: {
+                    purple: '#6366F1', // Primary purple
+                    'purple-dark': '#4F46E5',
+                    'purple-light': '#818CF8',
+                    'purple-50': '#EEF2FF',
+                    'purple-100': '#E0E7FF',
+                    violet: '#8B5CF6',
+                    'violet-dark': '#7C3AED',
+                    'violet-light': '#A78BFA',
+                },
+            },
+            boxShadow: {
+                'revolut': '0 2px 8px rgba(0, 0, 0, 0.08)',
+                'revolut-lg': '0 4px 16px rgba(0, 0, 0, 0.12)',
+            },
+            borderRadius: {
+                'revolut': '16px',
+                'revolut-sm': '12px',
             },
         },
     },

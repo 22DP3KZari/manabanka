@@ -16,6 +16,18 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\StatementController;
 use App\Http\Controllers\BudgetPlannerController;
+use App\Http\Controllers\SpendingController;
+use App\Http\Controllers\LessonController;
+use App\Http\Controllers\Admin\LessonController as AdminLessonController;
+
+// Language switching route
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'lv'])) {
+        session(['locale' => $locale]);
+        session()->save(); // Ensure session is saved
+    }
+    return redirect()->back();
+})->name('lang.switch');
 
 // Welcome page route
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -65,14 +77,28 @@ Route::middleware(['auth'])->group(function () {
     // Statement routes
     Route::get('/statements', [StatementController::class, 'index'])->name('statements.index');
 
+    // Spending/Budget routes (Revolut-style)
+    Route::get('/spending', [SpendingController::class, 'index'])->name('spending.index');
+    Route::get('/spending/create', [SpendingController::class, 'create'])->name('spending.create');
+    Route::post('/spending', [SpendingController::class, 'store'])->name('spending.store');
+    Route::get('/spending/{spending}/edit', [SpendingController::class, 'edit'])->name('spending.edit');
+    Route::put('/spending/{spending}', [SpendingController::class, 'update'])->name('spending.update');
+    Route::delete('/spending/{spending}', [SpendingController::class, 'destroy'])->name('spending.destroy');
+
     // Budget Planner routes
     Route::get('/budget-planner', [BudgetPlannerController::class, 'index'])->name('budget-planner.index');
     Route::post('/budget-planner/calculate', [\App\Http\Controllers\BudgetPlannerController::class, 'calculate'])->name('budget-planner.calculate');
     Route::get('/budgets', [BudgetPlannerController::class, 'budgets'])->name('budgets.index');
     Route::delete('/budgets/{budget}', [BudgetPlannerController::class, 'destroy'])->name('budgets.destroy');
-    Route::get('/budgets/{budget}', [BudgetPlannerController::class, 'show'])->name('budgets.show');
     Route::get('/budgets/{budget}/edit', [BudgetPlannerController::class, 'edit'])->name('budgets.edit');
     Route::put('/budgets/{budget}', [BudgetPlannerController::class, 'update'])->name('budgets.update');
+    Route::post('/budgets/update-spending', [BudgetPlannerController::class, 'updateSpending'])->name('budgets.update-spending');
+
+    // Lessons routes (public)
+    Route::get('/lessons', [LessonController::class, 'index'])->name('lessons.index');
+    Route::get('/lessons/{slug}', [LessonController::class, 'show'])->name('lessons.show');
+    Route::post('/lessons/{slug}/complete', [LessonController::class, 'markComplete'])->name('lessons.complete');
+    Route::post('/lessons/{slug}/progress', [LessonController::class, 'updateProgress'])->name('lessons.progress');
 });
 
 // Admin Routes
@@ -118,4 +144,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         }
         return app(DashboardController::class)->transactions();
     })->name('transactions');
+
+    // Admin Lessons routes
+    Route::get('/lessons', [AdminLessonController::class, 'index'])->name('lessons.index');
+    Route::get('/lessons/{lesson}/edit', [AdminLessonController::class, 'edit'])->name('lessons.edit');
+    Route::put('/lessons/{lesson}', [AdminLessonController::class, 'update'])->name('lessons.update');
 });

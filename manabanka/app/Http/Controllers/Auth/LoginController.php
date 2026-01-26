@@ -40,7 +40,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => __('common.auth_failed'),
         ])->onlyInput('email');
     }
 
@@ -51,4 +51,4 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('/');
     }
-} 
+}

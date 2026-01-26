@@ -19,6 +19,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'role',
@@ -57,5 +59,28 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Get the user's full name.
+     * Falls back to the name field if first_name/last_name are not set (for backward compatibility).
+     */
+    public function getFullNameAttribute()
+    {
+        if ($this->first_name && $this->last_name) {
+            return $this->first_name . ' ' . $this->last_name;
+        }
+        return $this->name ?? '';
+    }
+
+    /**
+     * Get the user's first initial for avatars.
+     */
+    public function getInitialAttribute()
+    {
+        if ($this->first_name) {
+            return strtoupper(substr($this->first_name, 0, 1));
+        }
+        return strtoupper(substr($this->name ?? '', 0, 1));
     }
 }
