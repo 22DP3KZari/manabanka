@@ -1,9 +1,9 @@
-<!-- Minimal floating navigation -->
-<div class="absolute top-0 left-0 right-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 pt-6">
-        <div class="flex justify-between items-center">
-            <a href="{{ route('dashboard') }}" class="text-xl font-bold text-white">manaBanka</a>
-            <div class="flex items-center space-x-6">
+<!-- Minimal floating navigation: fixed on mobile so it stays visible -->
+<div class="fixed sm:absolute top-0 left-0 right-0 z-50 nav-safe-top">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-6 pb-2 sm:pb-0">
+        <div class="flex justify-between items-center min-h-[48px] sm:min-h-0">
+            <a href="{{ route('dashboard') }}" class="text-lg sm:text-xl font-bold text-white shrink-0 py-2 -my-2">manaBanka</a>
+            <div class="flex items-center gap-2 sm:gap-4 sm:space-x-6">
                 <!-- Navigation Links (Desktop) -->
                 <div class="hidden sm:flex items-center space-x-6">
                     <a href="{{ route('dashboard') }}" class="text-gray-400 hover:text-white transition-colors text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-white' : '' }}">
@@ -20,8 +20,8 @@
                     </a>
                 </div>
 
-                <!-- Language Selector -->
-                <div class="relative">
+                <!-- Language Selector (desktop only; mobile has it in the menu) -->
+                <div class="relative hidden sm:block">
                     <button id="navLanguageToggle" class="flex items-center space-x-1 text-gray-400 hover:text-white transition-colors text-sm font-medium focus:outline-none">
                         <span>{{ app()->getLocale() === 'lv' ? __('common.latvian') : __('common.english') }}</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,11 +67,11 @@
     </div>
 </div>
 
-<!-- Mobile Navigation Menu -->
-<div id="mobileMenu" class="sm:hidden fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-sm hidden">
-    <div class="h-full flex flex-col">
+<!-- Mobile Navigation Menu: z-[60] so it sits above the nav bar (z-50) and avoids double/overlapping header -->
+<div id="mobileMenu" class="sm:hidden fixed inset-0 z-[60] bg-slate-900/95 backdrop-blur-sm hidden">
+    <div class="h-full flex flex-col pt-[env(safe-area-inset-top)]">
         <!-- Mobile Menu Header -->
-        <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-700/50">
+        <div class="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-4 border-b border-slate-700/50">
             <span class="text-xl font-bold text-white">manaBanka</span>
             <button id="mobileMenuClose" class="p-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,20 +81,26 @@
         </div>
 
         <!-- Mobile Menu Content -->
-        <div class="flex-1 overflow-y-auto px-6 py-6">
-            <div class="space-y-1 mb-6">
-                <a href="{{ route('dashboard') }}" class="block px-4 py-3 rounded-lg text-base font-medium transition-colors {{ request()->routeIs('dashboard') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
+        <div class="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+            <div class="space-y-1 mb-4">
+                <a href="{{ route('dashboard') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('dashboard') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
                     {{ __('common.nav_dashboard') }}
                 </a>
-                <a href="{{ route('budget-planner.index') }}" class="block px-4 py-3 rounded-lg text-base font-medium transition-colors {{ request()->routeIs('budget-planner.index') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
+                <a href="{{ route('budget-planner.index') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('budget-planner.index') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
                     {{ __('common.nav_budgets') }}
                 </a>
-                <a href="{{ route('budgets.index') }}" class="block px-4 py-3 rounded-lg text-base font-medium transition-colors {{ request()->routeIs('budgets.index') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
+                <a href="{{ route('budgets.index') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('budgets.index') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
                     {{ __('common.nav_my_budgets') }}
                 </a>
-                <a href="{{ route('lessons.index') }}" class="block px-4 py-3 rounded-lg text-base font-medium transition-colors {{ request()->routeIs('lessons.*') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
+                <a href="{{ route('lessons.index') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('lessons.*') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
                     {{ __('common.lessons') }}
                 </a>
+            </div>
+            <!-- Language (mobile) -->
+            <div class="mb-6 pb-4 border-b border-slate-700/50">
+                <p class="px-4 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{{ __('common.language') }}</p>
+                <a href="{{ route('lang.switch', 'en') }}" class="flex items-center min-h-[44px] px-4 py-2 rounded-xl text-base {{ app()->getLocale() === 'en' ? 'text-white bg-slate-700/80' : 'text-gray-400 hover:bg-slate-800/60 hover:text-white' }}">{{ __('common.english') }}</a>
+                <a href="{{ route('lang.switch', 'lv') }}" class="flex items-center min-h-[44px] px-4 py-2 rounded-xl text-base {{ app()->getLocale() === 'lv' ? 'text-white bg-slate-700/80' : 'text-gray-400 hover:bg-slate-800/60 hover:text-white' }}">{{ __('common.latvian') }}</a>
             </div>
             
             <!-- User Info Section -->
@@ -104,7 +110,7 @@
                     <div class="text-xs text-gray-400">{{ Auth::user()->email }}</div>
                 </div>
             </div>
-            
+
             <!-- Logout -->
             <div class="pt-6 border-t border-slate-700/50">
                 <form method="POST" action="{{ route('logout') }}">

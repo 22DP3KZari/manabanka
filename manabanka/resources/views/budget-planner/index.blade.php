@@ -13,7 +13,7 @@
         @csrf
         
         <!-- Budget Name -->
-        <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+        <div class="card-solid p-6">
             <label for="name" class="block text-sm font-medium text-white mb-3">{{ __('common.budget_name') }} <span class="text-gray-500 text-xs">({{ __('common.optional') }})</span></label>
             <input type="text" name="name" id="name" 
                    class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent" 
@@ -21,7 +21,7 @@
         </div>
         
         <!-- Monthly Income -->
-        <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+        <div class="card-solid p-6">
             <label for="income" class="block text-sm font-medium text-white mb-3">{{ __('common.monthly_income') }} (€)</label>
             <input type="number" step="0.01" name="income" id="income" 
                    class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent" 
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Budget Summary -->
-        <div id="budgetSummary" class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hidden">
+        <div id="budgetSummary" class="card-solid p-6 hidden">
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <div class="text-sm text-gray-400 mb-1">{{ __('common.total_budget') }}</div>
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Category Budgets -->
-        <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+        <div class="card-solid p-6">
             <h2 class="text-xl font-semibold text-white mb-4">{{ __('common.category_budgets') }}</h2>
             <div class="space-y-4">
                 @php
@@ -108,18 +108,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const remaining = income - totalBudget;
 
-        // Update display
-        totalBudgetEl.textContent = `€${totalBudget.toFixed(2)}`;
-        remainingAmountEl.textContent = `€${remaining.toFixed(2)}`;
+        totalBudgetEl.textContent = '€' + totalBudget.toFixed(2);
+        remainingAmountEl.textContent = '€' + remaining.toFixed(2);
 
-        // Show/hide summary
         if (income > 0 || totalBudget > 0) {
             budgetSummary.classList.remove('hidden');
         } else {
             budgetSummary.classList.add('hidden');
         }
 
-        // Update remaining color
         if (remaining < 0) {
             remainingAmountEl.classList.remove('text-green-400');
             remainingAmountEl.classList.add('text-red-400');
@@ -131,9 +128,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    incomeInput.addEventListener('input', calculateBudget);
+    function debounce(fn, ms) {
+        let t;
+        return function() {
+            clearTimeout(t);
+            t = setTimeout(fn, ms);
+        };
+    }
+    const debouncedCalculate = debounce(calculateBudget, 120);
+
+    incomeInput.addEventListener('input', debouncedCalculate);
     categoryInputs.forEach(input => {
-        input.addEventListener('input', calculateBudget);
+        input.addEventListener('input', debouncedCalculate);
     });
 
     calculateBudget();

@@ -77,7 +77,7 @@
         </div>
 
         <!-- Categories List -->
-        <div class="space-y-3">
+        <div class="space-y-3 scroll-list">
             @forelse($categoryData as $category => $data)
                 @php
                     $categoryTranslations = [
@@ -112,7 +112,7 @@
                     $icon = $categoryIcon[$category] ?? '💰';
                     $color = $categoryColors[$category] ?? '#6B7280';
                 @endphp
-                <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4 hover:bg-slate-800/60 transition-colors">
+                <div class="card-solid p-4 hover:bg-slate-800/80 transition-colors">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4 flex-1">
                             <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl" style="background-color: {{ $color }}20;">

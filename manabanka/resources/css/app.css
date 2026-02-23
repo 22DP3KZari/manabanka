@@ -32,11 +32,35 @@
         position: relative;
         z-index: 1;
     }
+
+    /* Remove number input spinner arrows (add-money buttons on the side) */
+    input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        appearance: none;
+    }
 }
 
 @layer components {
     .revolut-card {
         @apply bg-white/80 backdrop-blur-sm rounded-revolut shadow-revolut p-6 transition-all duration-200 hover:shadow-revolut-lg hover:bg-white/90;
+    }
+
+    /* Solid cards for scroll-heavy lists: no backdrop-blur to reduce scroll jank */
+    .card-solid {
+        @apply bg-slate-800/70 border border-slate-700/50 rounded-xl;
+        contain: layout style paint;
+    }
+
+    /* Let browser skip/cost-reduce off-screen content for smoother scrolling */
+    .scroll-list {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 120px;
     }
     
     .revolut-button {

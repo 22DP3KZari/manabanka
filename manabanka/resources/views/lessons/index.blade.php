@@ -29,13 +29,13 @@
             <h2 class="text-2xl font-semibold text-white mb-4">
                 {{ $categories[$categoryKey] ?? ucfirst($categoryKey) }}
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 scroll-list">
                 @foreach($categoryLessons as $lesson)
                     @php
                         $progress = $userProgress[$lesson->id] ?? ['completed' => false, 'progress_percentage' => 0];
                     @endphp
                     <a href="{{ route('lessons.show', $lesson->slug) }}" 
-                       class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:bg-slate-800/60 hover:border-revolut-purple/50 transition-all group">
+                       class="card-solid p-5 hover:bg-slate-800/80 hover:border-revolut-purple/50 transition-colors border group">
                         <div class="flex items-start justify-between mb-3">
                             <div class="flex-1">
                                 <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-revolut-purple transition-colors">

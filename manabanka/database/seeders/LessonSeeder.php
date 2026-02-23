@@ -60,7 +60,7 @@ Galvenie jēdzieni:
 Kā sākt:
 
 Pirms investēšanas pārliecinieties, ka jums ir:
-- Rezerves fonds (3-6 mēnešu izdevumi)
+- Ārkārtas gadījumu fonds (3-6 mēnešu izdevumi)
 - Nav augstu procentu parādu
 - Skaidra izpratne par saviem finanšu mērķiem",
                 'category' => 'basics',

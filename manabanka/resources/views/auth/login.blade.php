@@ -75,7 +75,7 @@
                 @if(!old('email'))
                     <div>
                         <input id="email" name="email" type="email" required 
-                            class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                             placeholder="{{ __('common.email_address') }}"
                             value="{{ old('email') }}">
                     </div>
@@ -85,7 +85,7 @@
 
                 <div class="relative">
                     <input id="password" name="password" type="password" required 
-                        class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                        class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                         placeholder="{{ __('common.password') }}"
                         autofocus>
                     <!-- Caps Lock Warning - Clean inline indicator -->
@@ -110,8 +110,8 @@
                 </div>
 
                 <div class="text-center">
-                    <a href="{{ route('password.request') }}" class="text-revolut-purple hover:text-revolut-purple-light text-sm transition-colors">
-                        {{ __('common.forgot_passcode') }}
+                    <a href="{{ route('password.request') }}" class="text-sm text-revolut-purple hover:text-revolut-purple-light transition-colors">
+                        {{ __('common.forgot_password_link') }}
                     </a>
                 </div>
 

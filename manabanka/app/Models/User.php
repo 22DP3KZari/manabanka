@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
+    }
+
     /**
      * Get the user's full name.
      * Falls back to the name field if first_name/last_name are not set (for backward compatibility).

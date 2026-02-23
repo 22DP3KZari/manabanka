@@ -68,7 +68,7 @@
                                 maxlength="50"
                                 pattern="[\p{L}\s\-\'\.]+"
                                 title="First name must be 2-50 characters and can only contain letters, spaces, hyphens, apostrophes, and dots"
-                                class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('first_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                                class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('first_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                                 placeholder="{{ __('common.first_name') }}"
                                 value="{{ old('first_name') }}">
                             @error('first_name')
@@ -81,7 +81,7 @@
                                 maxlength="50"
                                 pattern="[\p{L}\s\-\'\.]+"
                                 title="Last name must be 2-50 characters and can only contain letters, spaces, hyphens, apostrophes, and dots"
-                                class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('last_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                                class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('last_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                                 placeholder="{{ __('common.last_name') }}"
                                 value="{{ old('last_name') }}">
                             @error('last_name')
@@ -92,7 +92,7 @@
                     
                     <div>
                         <input id="email" name="email" type="email" required 
-                            class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('email') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('email') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                             placeholder="{{ __('common.email_address') }}"
                             value="{{ old('email') }}">
                         @error('email')
@@ -102,7 +102,7 @@
                     
                     <div class="relative">
                         <input id="password" name="password" type="password" required 
-                            class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                             placeholder="{{ __('common.create_password') }}">
                         <!-- Caps Lock Warning - Clean inline indicator -->
                         <div id="capsLockWarning" class="hidden absolute right-10 top-1/2 -translate-y-1/2">
@@ -127,7 +127,7 @@
                     
                     <div class="relative">
                         <input id="password_confirmation" name="password_confirmation" type="password" required 
-                            class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-center text-sm transition-all" 
+                            class="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-700 placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                             placeholder="{{ __('common.confirm_password') }}">
                         <!-- Caps Lock Warning - Clean inline indicator -->
                         <div id="capsLockWarningConfirm" class="hidden absolute right-10 top-1/2 -translate-y-1/2">

@@ -84,7 +84,7 @@ class BudgetPlannerController extends Controller
             'detailed_expenses' => $categoryBudgets,
         ]);
 
-        return redirect()->route('budgets.index')
+        return redirect()->route('budgets.index', ['budget_id' => $budget->id])
             ->with('success', __('common.budget_created_successfully'));
     }
 
@@ -99,17 +99,23 @@ class BudgetPlannerController extends Controller
         $year = $now->year;
         $month = $now->month;
 
-        // Get selected budget ID from query parameter, default to latest
+        // Get selected budget: query param > session > latest (newest first)
         $selectedBudgetId = $request->get('budget_id');
         if ($selectedBudgetId) {
             $selectedBudget = $budgets->firstWhere('id', $selectedBudgetId);
             if (!$selectedBudget || $selectedBudget->user_id !== Auth::id()) {
-                // Invalid budget ID, use latest
                 $selectedBudget = $budgets->first();
             }
+            session(['selected_budget_id' => $selectedBudget->id]);
         } else {
-            // Default to latest budget
-            $selectedBudget = $budgets->first();
+            $sessionId = session('selected_budget_id');
+            $selectedBudget = $sessionId ? $budgets->firstWhere('id', $sessionId) : null;
+            if (!$selectedBudget || $selectedBudget->user_id !== Auth::id()) {
+                $selectedBudget = $budgets->first();
+            }
+            if ($selectedBudget) {
+                session(['selected_budget_id' => $selectedBudget->id]);
+            }
         }
 
         // Get category budgets for the selected budget
@@ -383,7 +389,7 @@ class BudgetPlannerController extends Controller
             'other' => $other,
         ]);
 
-        return redirect()->route('budgets.index')
+        return redirect()->route('budgets.index', ['budget_id' => $budget->id])
             ->with('success', 'Budget plan updated successfully.');
     }
 
@@ -421,7 +427,7 @@ class BudgetPlannerController extends Controller
 
         if (abs($difference) < 0.01) {
             // No change needed
-            return redirect()->route('budgets.index')
+            return redirect()->route('budgets.index', ['budget_id' => (int) $request->input('budget_id')])
                 ->with('success', __('common.spending_updated_successfully'));
         }
 
@@ -461,7 +467,7 @@ class BudgetPlannerController extends Controller
             }
         }
 
-        return redirect()->route('budgets.index')
+        return redirect()->route('budgets.index', ['budget_id' => $validated['budget_id']])
             ->with('success', __('common.spending_updated_successfully'));
     }
 } 

@@ -25,9 +25,9 @@
         </div>
     @else
         <!-- Budgets List -->
-        <div class="space-y-4 mb-6">
+        <div class="space-y-4 mb-6 scroll-list">
             @foreach($budgets as $budget)
-                <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/60 transition-colors">
+                <div class="card-solid p-6 hover:bg-slate-800/80 transition-colors">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-xl font-semibold text-white mb-1">
@@ -130,18 +130,17 @@
                     'insurance' => '🛡️',
                     'miscellaneous' => '📦',
                 ];
+                $statusColors = [
+                    'on_track' => 'bg-green-500/20 border-green-500/30 text-green-400',
+                    'warning' => 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400',
+                    'over_budget' => 'bg-red-500/20 border-red-500/30 text-red-400',
+                ];
             @endphp
 
+            <div class="scroll-list space-y-4">
             @foreach($budgetData as $data)
-                @php
-                    $statusColors = [
-                        'on_track' => 'bg-green-500/20 border-green-500/30 text-green-400',
-                        'warning' => 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400',
-                        'over_budget' => 'bg-red-500/20 border-red-500/30 text-red-400',
-                    ];
-                    $statusColor = $statusColors[$data['status']] ?? 'bg-gray-500/20 border-gray-500/30 text-gray-400';
-                @endphp
-                <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:bg-slate-800/60 transition-colors">
+                @php $statusColor = $statusColors[$data['status']] ?? 'bg-gray-500/20 border-gray-500/30 text-gray-400'; @endphp
+                <div class="card-solid p-5 hover:bg-slate-800/80 transition-colors">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-4 flex-1">
                             <div class="w-12 h-12 rounded-lg bg-slate-700/50 flex items-center justify-center text-2xl">
@@ -186,6 +185,7 @@
                     </div>
                 </div>
             @endforeach
+            </div>
         </div>
     @endif
 </div>
@@ -225,7 +225,7 @@
                    min="0" 
                    name="amount" 
                    id="spentAmount" 
-                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                   class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-lg" 
                    required 
                    placeholder="0.00"
                    value="">

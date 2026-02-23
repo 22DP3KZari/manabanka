@@ -20,11 +20,15 @@ use App\Http\Controllers\SpendingController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\Admin\LessonController as AdminLessonController;
 
-// Language switching route
-Route::get('/lang/{locale}', function ($locale) {
+// Language switching route (redirects back to current page so admin/app both work)
+Route::get('/lang/{locale}', function (Request $request, $locale) {
     if (in_array($locale, ['en', 'lv'])) {
         session(['locale' => $locale]);
-        session()->save(); // Ensure session is saved
+        session()->save();
+    }
+    $back = $request->query('back');
+    if ($back && \Illuminate\Support\Str::startsWith($back, '/') && !\Illuminate\Support\Str::contains($back, '//')) {
+        return redirect()->to($back);
     }
     return redirect()->back();
 })->name('lang.switch');
@@ -65,9 +69,11 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // Goals (emergency fund, first ETF buy)
+    Route::get('/goals', [\App\Http\Controllers\GoalController::class, 'index'])->name('goals.index');
+    Route::post('/goals', [\App\Http\Controllers\GoalController::class, 'store'])->name('goals.store');
 
     // Transfer routes
     Route::get('/transfers/create', [TransferController::class, 'showTransferForm'])->name('transfers.create');
@@ -93,6 +99,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/budgets/{budget}/edit', [BudgetPlannerController::class, 'edit'])->name('budgets.edit');
     Route::put('/budgets/{budget}', [BudgetPlannerController::class, 'update'])->name('budgets.update');
     Route::post('/budgets/update-spending', [BudgetPlannerController::class, 'updateSpending'])->name('budgets.update-spending');
+
+    // ETF savings plan calculator
+    Route::get('/etf-calculator', [\App\Http\Controllers\EtfCalculatorController::class, 'index'])->name('etf-calculator.index');
 
     // Lessons routes (public)
     Route::get('/lessons', [LessonController::class, 'index'])->name('lessons.index');
