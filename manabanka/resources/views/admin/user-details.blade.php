@@ -98,11 +98,10 @@
     </div>
 
     <!-- Delete modal -->
-    <div id="deleteModal" class="fixed z-50 inset-0 overflow-y-auto hidden" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-slate-800 border border-slate-700 rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full text-left overflow-hidden mx-4 sm:mx-0">
+    <div id="deleteModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/70" aria-hidden="true" onclick="closeModal()"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div class="w-full max-w-lg rounded-xl border border-slate-700 bg-slate-800 text-left shadow-xl overflow-hidden" onclick="event.stopPropagation()">
                 <div class="px-4 pt-5 pb-4 sm:p-6">
                     <div class="sm:flex sm:items-start">
                         <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-xl bg-red-500/20 border border-red-500/30 sm:mx-0">
@@ -125,11 +124,10 @@
     </div>
 
     <!-- Reset password modal -->
-    <div id="resetPasswordModal" class="fixed z-50 inset-0 overflow-y-auto hidden" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <form id="resetPasswordForm" method="POST" action="{{ route('admin.users.reset-password', $user->id) }}" class="inline-block align-bottom bg-slate-800 border border-slate-700 rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full text-left overflow-hidden mx-4 sm:mx-0">
+    <div id="resetPasswordModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/70" aria-hidden="true" onclick="closeResetPasswordModal()"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4 sm:p-6">
+            <form id="resetPasswordForm" method="POST" action="{{ route('admin.users.reset-password', $user->id) }}" class="w-full max-w-lg rounded-xl border border-slate-700 bg-slate-800 text-left shadow-xl overflow-hidden" onclick="event.stopPropagation()">
                 @csrf
                 <div class="px-4 pt-5 pb-4 sm:p-6">
                     <h3 class="text-lg font-semibold text-white">{{ __('common.admin_reset_password') }}: {{ $user->name }}</h3>

@@ -65,9 +65,9 @@
                         <div>
                             <input id="first_name" name="first_name" type="text" required 
                                 minlength="2"
-                                maxlength="50"
-                                pattern="[\p{L}\s\-\'\.]+"
-                                title="First name must be 2-50 characters and can only contain letters, spaces, hyphens, apostrophes, and dots"
+                                maxlength="30"
+                                pattern="[\p{L}\-']+"
+                                title="First name must be 2-30 characters and can only contain letters and hyphens/apostrophes (no spaces, dots, or commas)"
                                 class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('first_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                                 placeholder="{{ __('common.first_name') }}"
                                 value="{{ old('first_name') }}">
@@ -78,9 +78,9 @@
                         <div>
                             <input id="last_name" name="last_name" type="text" required 
                                 minlength="2"
-                                maxlength="50"
-                                pattern="[\p{L}\s\-\'\.]+"
-                                title="Last name must be 2-50 characters and can only contain letters, spaces, hyphens, apostrophes, and dots"
+                                maxlength="30"
+                                pattern="[\p{L}\-']+"
+                                title="Last name must be 2-30 characters and can only contain letters and hyphens/apostrophes (no spaces, dots, or commas)"
                                 class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('last_name') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                                 placeholder="{{ __('common.last_name') }}"
                                 value="{{ old('last_name') }}">
@@ -92,6 +92,7 @@
                     
                     <div>
                         <input id="email" name="email" type="email" required 
+                            maxlength="30"
                             class="w-full px-4 py-3 bg-slate-800/50 border {{ $errors->has('email') ? 'border-red-500/50' : 'border-slate-700' }} placeholder-gray-500 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-purple focus:border-transparent text-left text-sm transition-all" 
                             placeholder="{{ __('common.email_address') }}"
                             value="{{ old('email') }}">
@@ -269,7 +270,6 @@
                                 const syntheticEvent = {
                                     getModifierState: function(key) {
                                         if (key === 'CapsLock') {
-                                            // We can't directly check, but the next real keypress will show it
                                             return false;
                                         }
                                         return false;

@@ -27,17 +27,19 @@ class RegisterController extends Controller
                 'required',
                 'string',
                 'min:2',
-                'max:50',
-                'regex:/^[\p{L}\s\-\'\.]+$/u', // Allows letters (including accented), spaces, hyphens, apostrophes, and dots
+                'max:30',
+                // Allows letters (including accented), hyphens and apostrophes; no spaces, dots or commas
+                'regex:/^[\p{L}\-\x27]+$/u',
             ],
             'last_name' => [
                 'required',
                 'string',
                 'min:2',
-                'max:50',
-                'regex:/^[\p{L}\s\-\'\.]+$/u', // Allows letters (including accented), spaces, hyphens, apostrophes, and dots
+                'max:30',
+                // Allows letters (including accented), hyphens and apostrophes; no spaces, dots or commas
+                'regex:/^[\p{L}\-\x27]+$/u',
             ],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:30', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
             'first_name.required' => __('common.first_name_required'),
@@ -51,6 +53,7 @@ class RegisterController extends Controller
             'email.required' => __('common.email_required'),
             'email.email' => __('common.email_email'),
             'email.unique' => __('common.email_unique'),
+            'email.max' => __('common.email_max'),
             'password.required' => __('common.password_required'),
             'password.min' => __('common.password_min'),
             'password.confirmed' => __('common.password_confirmed'),

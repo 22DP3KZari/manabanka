@@ -3,7 +3,7 @@
 @section('title', __('common.spending') . ' - manaBanka')
 
 @section('content')
-<div class="min-h-screen pb-20">
+<div class="min-h-screen pb-8 pb-[max(1rem,env(safe-area-inset-bottom))]">
     <!-- Header -->
     <div class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -42,6 +42,20 @@
                 {{ session('success') }}
             </div>
         @endif
+
+        <div class="mb-6 flex justify-center sm:justify-start">
+            <div class="inline-flex rounded-lg border border-slate-700/60 bg-slate-800/60 p-1" role="tablist" aria-label="{{ __('common.spending') }}">
+                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'spending']) }}"
+                   class="rounded-md px-4 py-2 text-sm font-medium transition-colors {{ in_array($tab, ['spending', 'income', 'cashflow'], true) ? 'bg-revolut-purple/25 text-white' : 'text-gray-400 hover:text-white' }}">
+                    {{ __('common.spending') }}
+                </a>
+                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'budget']) }}"
+                   class="rounded-md px-4 py-2 text-sm font-medium transition-colors {{ $tab === 'budget' ? 'bg-revolut-purple/25 text-white' : 'text-gray-400 hover:text-white' }}">
+                    {{ __('common.budget') }}
+                </a>
+            </div>
+        </div>
+
         <!-- Donut Chart Section -->
         <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 mb-6">
             <div class="flex flex-col items-center">
@@ -219,42 +233,6 @@
                     </div>
                 </div>
             @endforelse
-        </div>
-    </div>
-
-    <!-- Bottom Tab Navigation -->
-    <div class="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700/50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-around h-16">
-                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'spending']) }}" 
-                   class="flex flex-col items-center justify-center flex-1 py-2 {{ $tab === 'spending' ? 'text-revolut-purple' : 'text-gray-400' }} transition-colors">
-                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span class="text-xs font-medium">{{ __('common.spending') }}</span>
-                </a>
-                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'income']) }}" 
-                   class="flex flex-col items-center justify-center flex-1 py-2 {{ $tab === 'income' ? 'text-revolut-purple' : 'text-gray-400' }} transition-colors">
-                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span class="text-xs font-medium">{{ __('common.income') }}</span>
-                </a>
-                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'cashflow']) }}" 
-                   class="flex flex-col items-center justify-center flex-1 py-2 {{ $tab === 'cashflow' ? 'text-revolut-purple' : 'text-gray-400' }} transition-colors">
-                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span class="text-xs font-medium">{{ __('common.cash_flow') }}</span>
-                </a>
-                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'budget']) }}" 
-                   class="flex flex-col items-center justify-center flex-1 py-2 {{ $tab === 'budget' ? 'text-revolut-purple' : 'text-gray-400' }} transition-colors">
-                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <span class="text-xs font-medium">{{ __('common.budget') }}</span>
-                </a>
-            </div>
         </div>
     </div>
 </div>

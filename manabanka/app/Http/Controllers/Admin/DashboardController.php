@@ -23,7 +23,6 @@ class DashboardController extends Controller
         $stats = [
             'total_users' => User::where('role', 'user')->count(),
             'total_transactions' => Transaction::count(),
-            'total_volume' => Transaction::sum('amount'),
             'recent_transactions' => Transaction::with('user')
                 ->latest()
                 ->take(5)

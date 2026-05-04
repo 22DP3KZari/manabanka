@@ -1,5 +1,5 @@
-<!-- Minimal floating navigation: fixed on mobile so it stays visible -->
-<div class="fixed sm:absolute top-0 left-0 right-0 z-50 nav-safe-top">
+<!-- Fixed on mobile: solid bar so scrolled content never shows through the logo/links -->
+<div class="fixed sm:absolute top-0 left-0 right-0 z-50 nav-safe-top bg-slate-950/95 backdrop-blur-md border-b border-slate-800/70 shadow-[0_4px_24px_rgba(0,0,0,0.35)] sm:bg-transparent sm:backdrop-blur-none sm:border-b-0 sm:shadow-none">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-6 pb-2 sm:pb-0">
         <div class="flex justify-between items-center min-h-[48px] sm:min-h-0">
             <a href="{{ route('dashboard') }}" class="text-lg sm:text-xl font-bold text-white shrink-0 py-2 -my-2">manaBanka</a>
@@ -14,6 +14,9 @@
                     </a>
                     <a href="{{ route('budgets.index') }}" class="text-gray-400 hover:text-white transition-colors text-sm font-medium {{ request()->routeIs('budgets.index') ? 'text-white' : '' }}">
                         {{ __('common.nav_my_budgets') }}
+                    </a>
+                    <a href="{{ route('spending.index') }}" class="text-gray-400 hover:text-white transition-colors text-sm font-medium {{ request()->routeIs('spending.*') ? 'text-white' : '' }}">
+                        {{ __('common.nav_spending') }}
                     </a>
                     <a href="{{ route('lessons.index') }}" class="text-gray-400 hover:text-white transition-colors text-sm font-medium {{ request()->routeIs('lessons.*') ? 'text-white' : '' }}">
                         {{ __('common.lessons') }}
@@ -91,6 +94,9 @@
                 </a>
                 <a href="{{ route('budgets.index') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('budgets.index') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
                     {{ __('common.nav_my_budgets') }}
+                </a>
+                <a href="{{ route('spending.index') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('spending.*') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
+                    {{ __('common.nav_spending') }}
                 </a>
                 <a href="{{ route('lessons.index') }}" class="flex items-center min-h-[48px] px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('lessons.*') ? 'text-white bg-slate-800/50' : 'text-gray-400 hover:text-white hover:bg-slate-800/30' }}">
                     {{ __('common.lessons') }}

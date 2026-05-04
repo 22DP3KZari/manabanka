@@ -75,11 +75,10 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-slate-800 border border-slate-700 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full mx-4 sm:mx-0">
+    <div id="deleteModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/70 transition-opacity" aria-hidden="true" onclick="closeModal()"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div class="w-full max-w-lg rounded-xl border border-slate-700 bg-slate-800 text-left overflow-hidden shadow-xl" onclick="event.stopPropagation()">
                 <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-xl bg-red-500/20 border border-red-500/30 sm:mx-0 sm:h-10 sm:w-10">
