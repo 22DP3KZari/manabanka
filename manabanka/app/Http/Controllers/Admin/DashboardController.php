@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Spending;
 use App\Models\User;
-use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 
 class DashboardController extends Controller
 {
+    // Admin overview: users, spending records, and recent activity snapshots.
     public function __construct()
     {
         $this->middleware(['auth', 'admin']);
@@ -22,8 +20,8 @@ class DashboardController extends Controller
         // Get statistics
         $stats = [
             'total_users' => User::where('role', 'user')->count(),
-            'total_transactions' => Transaction::count(),
-            'recent_transactions' => Transaction::with('user')
+            'total_transactions' => Spending::count(),
+            'recent_transactions' => Spending::with('user')
                 ->latest()
                 ->take(5)
                 ->get(),
@@ -36,8 +34,8 @@ class DashboardController extends Controller
     public function users()
     {
         $users = User::where('role', 'user')
-            ->withCount('transactions')
-            ->withSum('transactions', 'amount')
+            ->withCount('spendings')
+            ->withSum('spendings', 'amount')
             ->latest()
             ->paginate(10);
 
@@ -50,7 +48,7 @@ class DashboardController extends Controller
             abort(403, 'Cannot view admin user details.');
         }
 
-        $user->load(['transactions' => function ($query) {
+        $user->load(['spendings' => function ($query) {
             $query->latest()->take(10);
         }]);
 
@@ -63,8 +61,8 @@ class DashboardController extends Controller
             abort(403, 'Cannot delete admin user.');
         }
 
-        // Delete user's transactions first
-        $user->transactions()->delete();
+        // Delete user's spendings first
+        $user->spendings()->delete();
         
         // Delete the user
         $user->delete();
@@ -73,24 +71,9 @@ class DashboardController extends Controller
             ->with('success', 'User has been deleted successfully.');
     }
 
-    public function resetUserPassword(User $user, Request $request)
-    {
-        if ($user->role === 'admin') {
-            abort(403, 'Cannot reset admin user password.');
-        }
-
-        // Generate password reset token
-        $token = Password::createToken($user);
-        $resetLink = url('/reset-password/' . $token . '?email=' . urlencode($user->email));
-
-        return redirect()->route('admin.users.show', $user)
-            ->with('success', 'Password reset link generated successfully. Please copy and share this link with the user:')
-            ->with('resetLink', $resetLink);
-    }
-
     public function transactions()
     {
-        $transactions = Transaction::with('user')
+        $transactions = Spending::with('user')
             ->latest()
             ->paginate(15);
 
@@ -99,8 +82,8 @@ class DashboardController extends Controller
 
     private function getSuspiciousActivity()
     {
-        // Example: Find transactions above 5000 EUR
-        return Transaction::where('amount', '>', 5000)
+        // Example: Find spendings above 5000 EUR
+        return Spending::where('amount', '>', 5000)
             ->with('user')
             ->latest()
             ->take(5)
@@ -109,13 +92,13 @@ class DashboardController extends Controller
 
     private function getDailyTransactionStats()
     {
-        return Transaction::select(
+        return Spending::select(
             DB::raw('DATE(created_at) as date'),
             DB::raw('COUNT(*) as count'),
             DB::raw('SUM(amount) as total')
         )
-        ->groupBy('date')
-        ->orderBy('date', 'desc')
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->orderByRaw('DATE(created_at) DESC')
         ->take(7)
         ->get();
     }

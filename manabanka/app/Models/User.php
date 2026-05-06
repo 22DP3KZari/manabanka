@@ -56,9 +56,9 @@ class User extends Authenticatable
         return $this->role === 'user';
     }
 
-    public function transactions()
+    public function spendings()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Spending::class);
     }
 
     public function goals()

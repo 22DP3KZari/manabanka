@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
 {
+    // Maintains two goal types used across dashboard and goals pages.
     public function index()
     {
         $goals = Goal::where('user_id', Auth::id())

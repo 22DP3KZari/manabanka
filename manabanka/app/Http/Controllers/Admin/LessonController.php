@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LessonController extends Controller
 {
+    // Admin-only endpoints for managing Latvian lesson translation fields.
     public function __construct()
     {
         $this->middleware(['auth']);

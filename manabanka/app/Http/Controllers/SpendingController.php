@@ -10,6 +10,7 @@ use Carbon\Carbon;
 
 class SpendingController extends Controller
 {
+    // Core spending CRUD plus analytics data for charts and budget comparison.
     public function index(Request $request)
     {
         $period = $request->get('period', '1m'); // 1w, 1m, 6m, 1y

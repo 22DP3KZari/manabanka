@@ -28,8 +28,8 @@
                     <tr class="hover:bg-slate-800/40 transition-colors">
                         <td class="whitespace-nowrap py-4 pl-4 text-sm font-medium text-white sm:pl-6">{{ $user->name }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400">{{ $user->email }}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400">{{ $user->transactions_count }}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400">€{{ number_format($user->transactions_sum_amount ?? 0, 2) }}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400">{{ $user->spendings_count }}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400">€{{ number_format($user->spendings_sum_amount ?? 0, 2) }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400">{{ $user->created_at->format('M d, Y') }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm">
                             <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">{{ __('common.admin_active') }}</span>
@@ -55,8 +55,8 @@
                         <p class="text-sm font-medium text-white truncate">{{ $user->name }}</p>
                         <p class="text-xs text-gray-400 truncate mt-0.5">{{ $user->email }}</p>
                         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-gray-500">
-                            <span>{{ $user->transactions_count }} txns</span>
-                            <span>€{{ number_format($user->transactions_sum_amount ?? 0, 2) }}</span>
+                            <span>{{ $user->spendings_count }} ieraksti</span>
+                            <span>€{{ number_format($user->spendings_sum_amount ?? 0, 2) }}</span>
                             <span>{{ $user->created_at->format('M d, Y') }}</span>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    // Handles sign-in, role-based post-login redirect, and sign-out.
     public function __construct()
     {
         // Remove guest middleware

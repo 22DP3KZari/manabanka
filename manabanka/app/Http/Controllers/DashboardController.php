@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    // Builds the signed-in user's dashboard cards and progress widgets.
     /**
      * Show the user dashboard with real budget health and goals.
      */
@@ -35,6 +36,7 @@ class DashboardController extends Controller
      */
     private function getBudgetHealthForDashboard(): array
     {
+        // Always anchor dashboard health to the user's latest budget snapshot.
         $selectedBudget = Budget::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->first();

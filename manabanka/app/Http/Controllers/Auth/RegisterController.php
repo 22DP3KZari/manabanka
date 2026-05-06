@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
+    // Handles account creation with strict name/email/password validation rules.
     public function __construct()
     {
         $this->middleware('guest');

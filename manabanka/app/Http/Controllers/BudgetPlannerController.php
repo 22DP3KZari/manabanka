@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 class BudgetPlannerController extends Controller
 {
+    // Handles budget creation, monthly category planning, and budget-vs-actual tracking.
     public function index()
     {
         return view('budget-planner.index');
@@ -90,6 +91,7 @@ class BudgetPlannerController extends Controller
 
     public function budgets(Request $request)
     {
+        // This action feeds the "My Budgets" view with both plan values and real spending.
         // Get all budgets for the user
         $budgets = Budget::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')

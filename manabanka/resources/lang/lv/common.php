@@ -40,20 +40,6 @@ return [
     'no_account' => 'Nav konta?',
     'register_here' => 'Reģistrējieties šeit',
 
-    // Password reset (when you forgot your password on login)
-    'password_reset' => 'Paroles maiņa',
-    'forgot_password_link' => 'Aizmirsi paroli?',
-    'forgot_password_title' => 'Aizmirsi paroli?',
-    'forgot_password_help' => 'Ievadiet e-pastu, un mēs nosūtīsim paroles maiņas saiti. Saiti saņemsiet tikai e-pastā – mēs to nekad nerādām lapā.',
-    'send_reset_link' => 'Nosūtīt saiti',
-    'password_reset_sent_if_exists' => 'Ja konts ar šādu e-pastu pastāv, jūs drīz saņemsiet paroles maiņas saiti.',
-    'forgot_password_check_inbox' => 'Pārbaudiet pastkasti (un surogātpasta mapi) un izmantojiet saiti e-pastā, lai iestatītu jaunu paroli.',
-    'back_to_login' => 'Atpakaļ pie pieteikšanās',
-    'reset_password_title' => 'Mainīt paroli',
-    'reset_password_help' => 'Ievadiet jauno paroli zemāk.',
-    'new_password' => 'Jaunā parole',
-    'reset_password_button' => 'Mainīt paroli',
-    
     // Register page
     'create_account' => 'Izveidojiet savu kontu',
     'join_subtitle' => 'Pievienojieties manaBanka un sāciet savu finanšu ceļojumu',
@@ -318,9 +304,6 @@ return [
     'admin_transactions_count' => ':count ieraksti',
     'admin_user_info' => 'Lietotāja informācija',
     'admin_back_to_users' => 'Atpakaļ uz lietotājiem',
-    'admin_reset_password' => 'Mainīt paroli',
-    'admin_reset_password_modal_body' => 'Tiks ģenerēta paroles maiņas saite :email. Nokopējiet un nosūtiet to lietotājam, lai viņš iestatītu jaunu paroli.',
-    'admin_generate_reset_link' => 'Ģenerēt paroles maiņas saiti',
     'admin_delete_user' => 'Dzēst lietotāju',
     'admin_no_transactions_yet' => 'Tēriņu ierakstu vēl nav.',
     'admin_delete_confirm_prefix' => 'Vai tiešām vēlaties dzēst ',

@@ -40,20 +40,6 @@ return [
     'no_account' => 'Don\'t have an account?',
     'register_here' => 'Register here',
 
-    // Password reset (when you forgot your password on login)
-    'password_reset' => 'Password reset',
-    'forgot_password_link' => 'Forgot your password?',
-    'forgot_password_title' => 'Forgot your password?',
-    'forgot_password_help' => 'Enter your email and we\'ll send you a link to reset your password. The link is sent only to your inbox – we never show it on the page.',
-    'send_reset_link' => 'Send reset link',
-    'password_reset_sent_if_exists' => 'If an account exists for that email, you will receive a password reset link shortly.',
-    'forgot_password_check_inbox' => 'Check your inbox (and spam folder) and use the link in the email to set a new password.',
-    'back_to_login' => 'Back to login',
-    'reset_password_title' => 'Reset your password',
-    'reset_password_help' => 'Enter your new password below.',
-    'new_password' => 'New password',
-    'reset_password_button' => 'Reset password',
-    
     // Register page
     'create_account' => 'Create your account',
     'join_subtitle' => 'Join manaBanka and start your financial journey',
@@ -318,9 +304,6 @@ return [
     'admin_transactions_count' => ':count records',
     'admin_user_info' => 'User Information',
     'admin_back_to_users' => 'Back to Users',
-    'admin_reset_password' => 'Reset Password',
-    'admin_reset_password_modal_body' => 'This will generate a password reset link for :email. Copy and share it so they can set a new password.',
-    'admin_generate_reset_link' => 'Generate Reset Link',
     'admin_delete_user' => 'Delete User',
     'admin_no_transactions_yet' => 'No spending records yet.',
     'admin_delete_confirm_prefix' => 'Are you sure you want to delete ',

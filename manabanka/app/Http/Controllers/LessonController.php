@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LessonController extends Controller
 {
+    // Public learning flow: listing lessons, viewing content, and tracking progress.
     public function index(Request $request)
     {
         $category = $request->get('category');
@@ -155,7 +156,7 @@ class LessonController extends Controller
             ]
         );
         
-        // Auto-complete if progress is 100%
+        // Keep completion state in sync when the client reports full progress.
         if ($validated['progress_percentage'] >= 100 && !$progress->completed) {
             $progress->update([
                 'completed' => true,

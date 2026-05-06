@@ -109,12 +109,6 @@
                     </button>
                 </div>
 
-                <div class="text-center">
-                    <a href="{{ route('password.request') }}" class="text-sm text-revolut-purple hover:text-revolut-purple-light transition-colors">
-                        {{ __('common.forgot_password_link') }}
-                    </a>
-                </div>
-
                 <div>
                     <button type="submit" class="w-full py-2.5 bg-revolut-purple hover:bg-revolut-purple-dark text-white font-medium rounded-lg transition-all duration-200 text-sm shadow-md shadow-revolut-purple/20 hover:shadow-revolut-purple/30 hover:scale-[1.02]">
                         {{ __('common.continue') }}
