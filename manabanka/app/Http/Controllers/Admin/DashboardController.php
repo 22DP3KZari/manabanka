@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Budget;
+use App\Models\CategoryBudget;
+use App\Models\Goal;
+use App\Models\LessonProgress;
 use App\Models\Spending;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -61,11 +65,18 @@ class DashboardController extends Controller
             abort(403, 'Cannot delete admin user.');
         }
 
-        // Delete user's spendings first
-        $user->spendings()->delete();
-        
-        // Delete the user
-        $user->delete();
+        // Remove dependent rows in FK-safe order (DB may lack CASCADE on some constraints).
+        DB::transaction(function () use ($user) {
+            $id = $user->id;
+
+            Spending::where('user_id', $id)->delete();
+            CategoryBudget::where('user_id', $id)->delete();
+            Budget::where('user_id', $id)->delete();
+            Goal::where('user_id', $id)->delete();
+            LessonProgress::where('user_id', $id)->delete();
+
+            $user->delete();
+        });
 
         return redirect()->route('admin.users')
             ->with('success', 'User has been deleted successfully.');
@@ -97,9 +108,9 @@ class DashboardController extends Controller
             DB::raw('COUNT(*) as count'),
             DB::raw('SUM(amount) as total')
         )
-        ->groupBy(DB::raw('DATE(created_at)'))
-        ->orderByRaw('DATE(created_at) DESC')
-        ->take(7)
-        ->get();
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderByRaw('DATE(created_at) DESC')
+            ->take(7)
+            ->get();
     }
-} 
+}

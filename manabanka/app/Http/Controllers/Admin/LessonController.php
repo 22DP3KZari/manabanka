@@ -43,6 +43,20 @@ class LessonController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+        // Only columns needed for the edit form (smaller hydration than full model row).
+        $lesson = Lesson::query()
+            ->select([
+                'id',
+                'title',
+                'title_lv',
+                'description',
+                'description_lv',
+                'content',
+                'content_lv',
+            ])
+            ->whereKey($lesson->getKey())
+            ->firstOrFail();
+
         return view('admin.lessons.edit', compact('lesson'));
     }
 

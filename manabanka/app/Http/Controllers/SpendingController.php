@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Spending;
 use App\Models\CategoryBudget;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Spending;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class SpendingController extends Controller
 {
+    /** Max spending rows to render per category in the expandable list (keeps DOM small). */
+    private const MAX_TRANSACTIONS_PER_CATEGORY = 45;
+
+    /** Upper bound on rows read when filling per-category recent lists. */
+    private const RECENT_SPENDING_FETCH_CAP = 700;
+
     // Core spending CRUD plus analytics data for charts and budget comparison.
     public function index(Request $request)
     {
         $period = $request->get('period', '1m'); // 1w, 1m, 6m, 1y
         $tab = $request->get('tab', 'spending'); // spending, income, cashflow, budget
-        
+
         // Calculate date range based on period
         $endDate = Carbon::now();
-        $startDate = match($period) {
+        $startDate = match ($period) {
             '1w' => $endDate->copy()->subWeek(),
             '1m' => $endDate->copy()->subMonth(),
             '6m' => $endDate->copy()->subMonths(6),
@@ -26,27 +33,30 @@ class SpendingController extends Controller
             default => $endDate->copy()->subMonth(),
         };
 
+        $userId = Auth::id();
+
         // Handle different tabs
         if ($tab === 'budget') {
             // Get current month's budgets
             $now = Carbon::now();
-            $categoryBudgets = CategoryBudget::where('user_id', Auth::id())
+            $categoryBudgets = CategoryBudget::where('user_id', $userId)
                 ->where('year', $now->year)
                 ->where('month', $now->month)
                 ->get();
 
-            // Get actual spending for current month
-            $spendings = Spending::where('user_id', Auth::id())
+            // Aggregate actual spending in SQL (avoids loading every row into PHP)
+            $spendingByCategory = Spending::query()
+                ->where('user_id', $userId)
                 ->whereYear('date', $now->year)
                 ->whereMonth('date', $now->month)
-                ->get();
-
-            $spendingByCategory = $spendings->groupBy('category')->map(function ($items) {
-                return [
-                    'amount' => $items->sum('amount'),
-                    'count' => $items->count(),
-                ];
-            });
+                ->selectRaw('category, SUM(amount) as total_amount, COUNT(*) as cnt')
+                ->groupBy('category')
+                ->get()
+                ->keyBy('category')
+                ->map(fn ($row) => [
+                    'amount' => (float) $row->total_amount,
+                    'count' => (int) $row->cnt,
+                ]);
 
             // Combine budgets with spending - key by category
             $categoryData = [];
@@ -54,7 +64,7 @@ class SpendingController extends Controller
                 $spendingInfo = $spendingByCategory->get($budget->category, ['amount' => 0, 'count' => 0]);
                 $actual = $spendingInfo['amount'];
                 $percentage = $budget->monthly_budget > 0 ? ($actual / $budget->monthly_budget) * 100 : 0;
-                
+
                 $categoryData[$budget->category] = [
                     'total' => $actual,
                     'budget' => $budget->monthly_budget,
@@ -66,33 +76,60 @@ class SpendingController extends Controller
             }
 
             // Sort by total descending
-            uasort($categoryData, function($a, $b) {
+            uasort($categoryData, function ($a, $b) {
                 return $b['total'] <=> $a['total'];
             });
 
-            $totalSpent = $spendings->sum('amount');
+            $totalSpent = $spendingByCategory->sum(fn (array $row) => $row['amount']);
         } else {
-            // Get spending data for the period
-            $spendings = Spending::where('user_id', Auth::id())
-                ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            $startStr = $startDate->format('Y-m-d');
+            $endStr = $endDate->format('Y-m-d');
+
+            // Totals per category in the database (fast path for chart + summary cards)
+            $aggregates = Spending::query()
+                ->where('user_id', $userId)
+                ->whereBetween('date', [$startStr, $endStr])
+                ->selectRaw('category, SUM(amount) as total_amount, COUNT(*) as cnt')
+                ->groupBy('category')
                 ->get();
 
-            // Group by category
-            $categoryData = $spendings->groupBy('category')->map(function ($items) {
-                return [
-                    'total' => $items->sum('amount'),
-                    'count' => $items->count(),
-                    'transactions' => $items->sortByDesc('date')
-                ];
-            })->sortByDesc('total');
+            $totalSpent = (float) $aggregates->sum('total_amount');
 
-            $totalSpent = $spendings->sum('amount');
+            $categoryData = Collection::make();
+            foreach ($aggregates->sortByDesc('total_amount') as $row) {
+                $cat = $row->category;
+                $catTotal = (float) $row->total_amount;
+                $categoryData->put($cat, [
+                    'total' => $catTotal,
+                    'count' => (int) $row->cnt,
+                    'percentage' => $totalSpent > 0 ? round(($catTotal / $totalSpent) * 100) : 0,
+                    'transactions' => collect(),
+                ]);
+            }
 
-            // Calculate percentages
-            $categoryData = $categoryData->map(function ($data) use ($totalSpent) {
-                $data['percentage'] = $totalSpent > 0 ? round(($data['total'] / $totalSpent) * 100) : 0;
-                return $data;
-            });
+            // Recent lines for the expandable lists only (capped per category)
+            if ($categoryData->isNotEmpty()) {
+                $recent = Spending::query()
+                    ->where('user_id', $userId)
+                    ->whereBetween('date', [$startStr, $endStr])
+                    ->select(['id', 'category', 'amount', 'date', 'description'])
+                    ->orderByDesc('date')
+                    ->limit(self::RECENT_SPENDING_FETCH_CAP)
+                    ->get();
+
+                $perCat = [];
+                foreach ($recent as $line) {
+                    if (! $categoryData->has($line->category)) {
+                        continue;
+                    }
+                    $n = $perCat[$line->category] ?? 0;
+                    if ($n >= self::MAX_TRANSACTIONS_PER_CATEGORY) {
+                        continue;
+                    }
+                    $categoryData[$line->category]['transactions']->push($line);
+                    $perCat[$line->category] = $n + 1;
+                }
+            }
         }
 
         // Category colors for chart
@@ -111,9 +148,16 @@ class SpendingController extends Controller
             'miscellaneous' => '#FF9800',    // Orange
         ];
 
+        // Chart.js only needs per-category totals — avoid embedding full transaction lists in the page JSON.
+        $chartCategoryData = [];
+        $rowsForChart = $categoryData instanceof Collection ? $categoryData->all() : $categoryData;
+        foreach ($rowsForChart as $cat => $row) {
+            $chartCategoryData[$cat] = ['total' => $row['total']];
+        }
+
         return view('spending.index', compact(
-            'spendings',
             'categoryData',
+            'chartCategoryData',
             'totalSpent',
             'startDate',
             'endDate',

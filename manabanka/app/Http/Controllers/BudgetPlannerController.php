@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Budget;
 use App\Models\CategoryBudget;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Spending;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BudgetPlannerController extends Controller
 {
@@ -25,16 +25,16 @@ class BudgetPlannerController extends Controller
         ]);
 
         $income = $validated['income'];
-        $name = $validated['name'] ?? 'Budget ' . Carbon::now()->format('M Y');
+        $name = $validated['name'] ?? 'Budget '.Carbon::now()->format('M Y');
         $now = Carbon::now();
         $year = $now->year;
         $month = $now->month;
-        
+
         // Collect category budgets from request
         $categories = [
             'housing', 'utilities', 'transportation', 'groceries',
             'dining_out', 'shopping', 'entertainment', 'subscriptions',
-            'personal_care', 'loan_payments', 'insurance', 'miscellaneous'
+            'personal_care', 'loan_payments', 'insurance', 'miscellaneous',
         ];
 
         $categoryBudgets = [];
@@ -68,7 +68,7 @@ class BudgetPlannerController extends Controller
                         'monthly_budget' => $budgetAmount,
                     ]
                 );
-                
+
                 $categoryBudgets[$category] = $budgetAmount;
                 $totalBudget += $budgetAmount;
             }
@@ -105,14 +105,14 @@ class BudgetPlannerController extends Controller
         $selectedBudgetId = $request->get('budget_id');
         if ($selectedBudgetId) {
             $selectedBudget = $budgets->firstWhere('id', $selectedBudgetId);
-            if (!$selectedBudget || $selectedBudget->user_id !== Auth::id()) {
+            if (! $selectedBudget || $selectedBudget->user_id !== Auth::id()) {
                 $selectedBudget = $budgets->first();
             }
             session(['selected_budget_id' => $selectedBudget->id]);
         } else {
             $sessionId = session('selected_budget_id');
             $selectedBudget = $sessionId ? $budgets->firstWhere('id', $sessionId) : null;
-            if (!$selectedBudget || $selectedBudget->user_id !== Auth::id()) {
+            if (! $selectedBudget || $selectedBudget->user_id !== Auth::id()) {
                 $selectedBudget = $budgets->first();
             }
             if ($selectedBudget) {
@@ -123,14 +123,14 @@ class BudgetPlannerController extends Controller
         // Get category budgets for the selected budget
         // Try multiple approaches to find category budgets
         $categoryBudgets = collect();
-        
+
         if ($selectedBudget) {
             // Approach 1: Use relationship to get category budgets
             $categoryBudgets = $selectedBudget->categoryBudgets()
                 ->orderBy('year', 'desc')
                 ->orderBy('month', 'desc')
                 ->get();
-            
+
             // Approach 2: If no results via relationship, try direct query by budget_id
             if ($categoryBudgets->isEmpty()) {
                 $categoryBudgets = CategoryBudget::where('user_id', Auth::id())
@@ -139,18 +139,18 @@ class BudgetPlannerController extends Controller
                     ->orderBy('month', 'desc')
                     ->get();
             }
-            
+
             // Approach 3: If still empty, try to use detailed_expenses from the budget itself
             // This is a fallback for budgets that don't have CategoryBudget records
             if ($categoryBudgets->isEmpty() && $selectedBudget->detailed_expenses) {
                 $detailedExpenses = $selectedBudget->detailed_expenses;
                 $budgetYear = $selectedBudget->created_at->year;
                 $budgetMonth = $selectedBudget->created_at->month;
-                
+
                 // Create CategoryBudget-like data from detailed_expenses
                 foreach ($detailedExpenses as $category => $amount) {
                     if ($amount > 0) {
-                        $categoryBudgets->push((object)[
+                        $categoryBudgets->push((object) [
                             'category' => $category,
                             'monthly_budget' => $amount,
                             'year' => $budgetYear,
@@ -159,13 +159,13 @@ class BudgetPlannerController extends Controller
                         ]);
                     }
                 }
-                
+
                 if ($categoryBudgets->isNotEmpty()) {
                     $year = $budgetYear;
                     $month = $budgetMonth;
                 }
             }
-            
+
             // Approach 4: If still empty, get ANY category budgets for current month
             // This is a last resort fallback
             if ($categoryBudgets->isEmpty()) {
@@ -175,7 +175,7 @@ class BudgetPlannerController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
             }
-            
+
             // Update year/month for display if we found budgets for a different period
             if ($categoryBudgets->isNotEmpty() && $categoryBudgets->first() instanceof CategoryBudget) {
                 $firstBudget = $categoryBudgets->first();
@@ -184,34 +184,32 @@ class BudgetPlannerController extends Controller
             }
         }
 
-        // Get actual spending for the same month/year as the category budgets
-        // Filter by budget_id to show only spending for the selected budget
-        $spendings = Spending::where('user_id', Auth::id())
+        // Actual spending by category in SQL (same filters as before; avoids loading all rows).
+        $spendingByCategory = Spending::query()
+            ->where('user_id', Auth::id())
             ->where('budget_id', $selectedBudget ? $selectedBudget->id : null)
             ->whereYear('date', $year)
             ->whereMonth('date', $month)
-            ->get();
-
-        // Calculate spending by category
-        $spendingByCategory = $spendings->groupBy('category')->map(function ($items) {
-            return $items->sum('amount');
-        });
+            ->selectRaw('category, SUM(amount) as total_amount')
+            ->groupBy('category')
+            ->pluck('total_amount', 'category')
+            ->map(fn ($v) => (float) $v);
 
         // Combine budgets with actual spending
         // Handle both CategoryBudget models and plain objects
         $budgetData = $categoryBudgets->map(function ($categoryBudget) use ($spendingByCategory, $selectedBudget) {
             // Handle both model instances and plain objects
             $category = is_object($categoryBudget) ? $categoryBudget->category : null;
-            $monthlyBudget = is_object($categoryBudget) ? (float)$categoryBudget->monthly_budget : 0;
+            $monthlyBudget = is_object($categoryBudget) ? (float) $categoryBudget->monthly_budget : 0;
             $budgetId = is_object($categoryBudget) ? ($categoryBudget->budget_id ?? null) : null;
-            
-            if (!$category) {
+
+            if (! $category) {
                 return null;
             }
-            
+
             $actual = $spendingByCategory->get($category, 0);
             $percentage = $monthlyBudget > 0 ? ($actual / $monthlyBudget) * 100 : 0;
-            
+
             return [
                 'category' => $category,
                 'budget' => $monthlyBudget,
@@ -232,6 +230,7 @@ class BudgetPlannerController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $budget->delete();
+
         return redirect()->route('budgets.index')->with('success', 'Budget plan deleted successfully.');
     }
 
@@ -332,13 +331,21 @@ class BudgetPlannerController extends Controller
 
         // Age-based budget percentages
         if ($age < 25) {
-            $needs_pct = 0.55; $wants_pct = 0.30; $savings_pct = 0.15;
+            $needs_pct = 0.55;
+            $wants_pct = 0.30;
+            $savings_pct = 0.15;
         } elseif ($age < 40) {
-            $needs_pct = 0.50; $wants_pct = 0.30; $savings_pct = 0.20;
+            $needs_pct = 0.50;
+            $wants_pct = 0.30;
+            $savings_pct = 0.20;
         } elseif ($age < 60) {
-            $needs_pct = 0.45; $wants_pct = 0.30; $savings_pct = 0.25;
+            $needs_pct = 0.45;
+            $wants_pct = 0.30;
+            $savings_pct = 0.25;
         } else {
-            $needs_pct = 0.60; $wants_pct = 0.25; $savings_pct = 0.15;
+            $needs_pct = 0.60;
+            $wants_pct = 0.25;
+            $savings_pct = 0.15;
         }
 
         // Adjust for dependents
@@ -369,9 +376,15 @@ class BudgetPlannerController extends Controller
             $needs_pct += $wants_pct;
             $wants_pct = 0;
         }
-        if ($needs_pct < 0) $needs_pct = 0;
-        if ($savings_pct < 0) $savings_pct = 0;
-        if ($debt_repayment_pct < 0) $debt_repayment_pct = 0;
+        if ($needs_pct < 0) {
+            $needs_pct = 0;
+        }
+        if ($savings_pct < 0) {
+            $savings_pct = 0;
+        }
+        if ($debt_repayment_pct < 0) {
+            $debt_repayment_pct = 0;
+        }
 
         // Calculate amounts
         $needs = $fixed_expenses;
@@ -404,7 +417,7 @@ class BudgetPlannerController extends Controller
         ]);
 
         $budget = Budget::findOrFail($validated['budget_id']);
-        
+
         // Ensure user owns this budget
         if ($budget->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
@@ -455,10 +468,12 @@ class BudgetPlannerController extends Controller
                 ->get();
 
             $remainingToRemove = abs($difference);
-            
+
             foreach ($spendings as $spending) {
-                if ($remainingToRemove <= 0) break;
-                
+                if ($remainingToRemove <= 0) {
+                    break;
+                }
+
                 if ($spending->amount <= $remainingToRemove) {
                     $remainingToRemove -= $spending->amount;
                     $spending->delete();
@@ -472,4 +487,4 @@ class BudgetPlannerController extends Controller
         return redirect()->route('budgets.index', ['budget_id' => $validated['budget_id']])
             ->with('success', __('common.spending_updated_successfully'));
     }
-} 
+}

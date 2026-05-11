@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -41,7 +42,7 @@ class RegisterController extends Controller
                 'regex:/^[\p{L}\-\x27]+$/u',
             ],
             'email' => ['required', 'string', 'email', 'max:30', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
         ], [
             'first_name.required' => __('common.first_name_required'),
             'first_name.min' => __('common.first_name_min'),
@@ -58,12 +59,14 @@ class RegisterController extends Controller
             'password.required' => __('common.password_required'),
             'password.min' => __('common.password_min'),
             'password.confirmed' => __('common.password_confirmed'),
+            'password.mixed' => __('common.password_mixed'),
+            'password.numbers' => __('common.password_numbers'),
         ]);
 
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'name' => $request->first_name . ' ' . $request->last_name, // Keep name for backward compatibility
+            'name' => $request->first_name.' '.$request->last_name, // Keep name for backward compatibility
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -72,4 +75,4 @@ class RegisterController extends Controller
 
         return redirect()->intended('/dashboard');
     }
-} 
+}

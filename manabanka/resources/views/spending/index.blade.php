@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('spendingChart');
     if (!ctx) return;
 
-    const categoryData = @json($categoryData);
+    const categoryData = @json($chartCategoryData ?? []);
     const categoryColors = @json($categoryColors);
     
     const labels = [];
@@ -287,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }]
         },
         options: {
+            animation: { duration: 0 },
             responsive: true,
             maintainAspectRatio: true,
             plugins: {

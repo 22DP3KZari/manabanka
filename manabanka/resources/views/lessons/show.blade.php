@@ -45,7 +45,7 @@
                 </span>
             @endif
             <span class="px-3 py-1 rounded-full bg-slate-700/50 text-gray-300">
-                {{ ucfirst($lesson->difficulty) }}
+                {{ __('common.difficulty_' . $lesson->difficulty) !== 'common.difficulty_' . $lesson->difficulty ? __('common.difficulty_' . $lesson->difficulty) : ucfirst($lesson->difficulty) }}
             </span>
             @if($userProgress)
                 <span class="px-3 py-1 rounded-full bg-revolut-purple/20 text-revolut-purple">

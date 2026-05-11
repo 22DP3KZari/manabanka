@@ -10,15 +10,3 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
-
-// Handle form submissions
-document.addEventListener('DOMContentLoaded', function() {
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            // Don't prevent default - let the form submit normally
-            // This is just to ensure the form is properly handled
-            console.log('Form submitted:', form.action);
-        });
-    });
-});

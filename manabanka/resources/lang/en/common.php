@@ -5,14 +5,14 @@ return [
     'language' => 'Language',
     'english' => 'English',
     'latvian' => 'Latvian',
-    
+
     // Navigation
     'nav_dashboard' => 'Dashboard',
     'nav_budgets' => 'Budgets',
     'nav_my_budgets' => 'My Budgets',
     'nav_spending' => 'Spending',
     'logout' => 'Logout',
-    
+
     // Welcome page
     'hero_title_part1' => 'Your money,',
     'hero_title_part2' => 'simplified',
@@ -20,7 +20,7 @@ return [
     'get_started' => 'Get started',
     'login' => 'Log in',
     'sign_up' => 'Sign up',
-    
+
     // Features
     'feature1_title' => 'Investing Made Simple',
     'feature1_description' => 'Learn the basics of ETFs and long-term investing with clear, actionable lessons.',
@@ -28,7 +28,7 @@ return [
     'feature2_description' => 'Track expenses, set goals, and understand exactly where your money goes.',
     'feature3_title' => 'Build Better Habits',
     'feature3_description' => 'Create routines for saving and investing that your future self will thank you for.',
-    
+
     // Login page
     'enter_passcode' => 'Enter passcode',
     'not_you' => 'Not you?',
@@ -57,10 +57,10 @@ return [
     'password_uppercase' => 'One uppercase letter',
     'password_lowercase' => 'One lowercase letter',
     'password_number' => 'One number',
-    'password_special' => 'One special character',
+    'password_special' => 'One special character (optional)',
     'password_must_include' => 'Your password must include:',
     'have_account' => 'Already have an account? Sign in',
-    
+
     // Validation errors
     'auth_failed' => 'The provided credentials do not match our records.',
     'first_name_required' => 'First name is required.',
@@ -78,7 +78,9 @@ return [
     'password_required' => 'Password is required.',
     'password_min' => 'Password must be at least 8 characters.',
     'password_confirmed' => 'Password confirmation does not match.',
-    
+    'password_mixed' => 'Password must include at least one uppercase and one lowercase letter.',
+    'password_numbers' => 'Password must include at least one number.',
+
     // Home page
     'home' => 'Home',
     'contact' => 'Contact',
@@ -107,7 +109,7 @@ return [
     'article_emergency' => 'How to build an emergency fund',
     'article_etf' => 'ETF basics: fees, risk, and diversification',
     'article_budget' => 'Create a 50/30/20 budget in 10 minutes',
-    
+
     // Dashboard page
     'welcome_back' => 'Welcome back, :name',
     'financial_overview' => 'Here\'s your financial overview',
@@ -217,7 +219,7 @@ return [
     'budget' => 'Budget',
     'select_budget' => 'Select Budget',
     'no_category_budgets_for_month' => 'This budget has no category budgets set for this period.',
-    
+
     // Add spending form
     'add_spending' => 'Add Spending',
     'amount' => 'Amount',
@@ -244,12 +246,12 @@ return [
     'confirm_delete_budget' => 'Are you sure you want to delete this budget?',
     'amount_spent' => 'Amount Spent',
     'save' => 'Save',
-    'manual_adjustment' => 'Manual adjustment',
+    'manual_adjustment' => 'Added from budget adjustment',
     'currently_spent' => 'Currently Spent',
     'add_amount' => 'Add Amount',
     'add_amount_hint' => 'Enter the amount to add to your current spending',
     'new_total' => 'New Total',
-    
+
     // Lessons
     'lessons' => 'Lessons',
     'lessons_subtitle' => 'Learn the basics of investing, ETFs, and financial planning',
@@ -259,6 +261,9 @@ return [
     'category_sp500' => 'S&P 500',
     'category_risk' => 'Risk Management',
     'category_savings' => 'Savings',
+    'difficulty_beginner' => 'Beginner',
+    'difficulty_intermediate' => 'Intermediate',
+    'difficulty_advanced' => 'Advanced',
     'min' => 'min',
     'complete' => 'complete',
     'no_lessons_found' => 'No lessons found in this category.',

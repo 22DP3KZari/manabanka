@@ -5,14 +5,14 @@ return [
     'language' => 'Valoda',
     'english' => 'Angļu',
     'latvian' => 'Latviešu',
-    
+
     // Navigation
     'nav_dashboard' => 'Informācijas panelis',
     'nav_budgets' => 'Budžeti',
     'nav_my_budgets' => 'Mani budžeti',
     'nav_spending' => 'Tēriņi',
     'logout' => 'Iziet',
-    
+
     // Welcome page
     'hero_title_part1' => 'Jūsu nauda,',
     'hero_title_part2' => 'vienkāršota',
@@ -20,7 +20,7 @@ return [
     'get_started' => 'Sākt',
     'login' => 'Pieslēgties',
     'sign_up' => 'Reģistrēties',
-    
+
     // Features
     'feature1_title' => 'Investēšana vienkāršota',
     'feature1_description' => 'Iemācieties ETF pamatus un ilgtermiņa investēšanu ar skaidriem, praktiskiem nodarbību materiāliem.',
@@ -28,7 +28,7 @@ return [
     'feature2_description' => 'Sekojiet izdevumiem, izvirziet mērķus un saprotiet, kur tieši iet jūsu nauda.',
     'feature3_title' => 'Veidojiet labākus ieradumus',
     'feature3_description' => 'Izveidojiet rutīnas taupīšanai un investēšanai, par kurām jūsu nākotnes es pateiks pateicību.',
-    
+
     // Login page
     'enter_passcode' => 'Ievadiet piekļuves kodu',
     'not_you' => 'Nav jūs?',
@@ -54,13 +54,13 @@ return [
     'password_good' => 'Laba',
     'password_strong' => 'Stipra',
     'password_length' => 'Vismaz 8 rakstzīmes',
-    'password_uppercase' => 'Viena lielā burtā',
+    'password_uppercase' => 'Viens lielais burts',
     'password_lowercase' => 'Viens mazais burts',
     'password_number' => 'Viens cipars',
-    'password_special' => 'Viena īpaša rakstzīme',
+    'password_special' => 'Viena īpaša rakstzīme (neobligāti)',
     'password_must_include' => 'Parolei jāiekļauj:',
     'have_account' => 'Jau ir konts? Pieslēdzaties',
-    
+
     // Validation errors
     'auth_failed' => 'Norādītie dati neatbilst mūsu ierakstiem.',
     'first_name_required' => 'Vārds ir obligāts.',
@@ -78,7 +78,9 @@ return [
     'password_required' => 'Parole ir obligāta.',
     'password_min' => 'Parolei jābūt vismaz 8 rakstzīmēm.',
     'password_confirmed' => 'Paroles apstiprinājums nesakrīt.',
-    
+    'password_mixed' => 'Parolei jāiekļauj vismaz viens lielais un viens mazais burts.',
+    'password_numbers' => 'Parolei jāiekļauj vismaz viens cipars.',
+
     // Home page
     'home' => 'Sākums',
     'contact' => 'Kontakti',
@@ -107,7 +109,7 @@ return [
     'article_emergency' => 'Kā izveidot ārkārtas gadījumu fondu',
     'article_etf' => 'ETF pamati: maksas, risks un diversifikācija',
     'article_budget' => 'Izveidot 50/30/20 budžetu 10 minūtēs',
-    
+
     // Dashboard page
     'welcome_back' => 'Laipni lūdzam atpakaļ, :name',
     'financial_overview' => 'Šeit ir jūsu finanšu pārskats',
@@ -217,7 +219,7 @@ return [
     'budget' => 'Budžets',
     'select_budget' => 'Izvēlēties budžetu',
     'no_category_budgets_for_month' => 'Šim budžetam nav iestatītu kategoriju budžetu šim periodam.',
-    
+
     // Add spending form
     'add_spending' => 'Pievienot tēriņus',
     'amount' => 'Summa',
@@ -244,12 +246,12 @@ return [
     'confirm_delete_budget' => 'Vai tiešām vēlaties dzēst šo budžetu?',
     'amount_spent' => 'Iztērētā summa',
     'save' => 'Saglabāt',
-    'manual_adjustment' => 'Manuāla korekcija',
+    'manual_adjustment' => 'Pievienots no budžeta korekcijas',
     'currently_spent' => 'Pašlaik iztērēts',
     'add_amount' => 'Pievienot summu',
     'add_amount_hint' => 'Ievadiet summu, ko pievienot pašreizējiem tēriņiem',
     'new_total' => 'Jaunā kopā',
-    
+
     // Lessons
     'lessons' => 'Nodarbības',
     'lessons_subtitle' => 'Iemācieties investēšanas, ETF un finanšu plānošanas pamatus',
@@ -259,6 +261,9 @@ return [
     'category_sp500' => 'S&P 500',
     'category_risk' => 'Riska pārvaldība',
     'category_savings' => 'Taupīšana',
+    'difficulty_beginner' => 'Iesācējiem',
+    'difficulty_intermediate' => 'Padziļinātāk',
+    'difficulty_advanced' => 'Padziļināts',
     'min' => 'min',
     'complete' => 'pabeigts',
     'no_lessons_found' => 'Šajā kategorijā nav atrastas nodarbības.',
