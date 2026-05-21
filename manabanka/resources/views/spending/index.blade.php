@@ -17,7 +17,9 @@
                     <div>
                         <div class="text-sm text-gray-400">{{ __('common.spending') }}</div>
                         <div class="text-xs text-gray-500">
-                            @if(app()->getLocale() === 'lv')
+                            @if($tab === 'budget' && !empty($budgetMonthLabel))
+                                {{ $budgetMonthLabel }}
+                            @elseif(app()->getLocale() === 'lv')
                                 {{ $startDate->format('d. F') }} – {{ $endDate->format('d. F') }}
                             @else
                                 {{ $startDate->format('M d') }} – {{ $endDate->format('M d') }}
@@ -45,16 +47,54 @@
 
         <div class="mb-6 flex justify-center sm:justify-start">
             <div class="inline-flex rounded-lg border border-slate-700/60 bg-slate-800/60 p-1" role="tablist" aria-label="{{ __('common.spending') }}">
-                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'spending']) }}"
+                <a href="{{ route('spending.index', array_filter(['period' => $period, 'tab' => 'spending'])) }}"
                    class="rounded-md px-4 py-2 text-sm font-medium transition-colors {{ in_array($tab, ['spending', 'income', 'cashflow'], true) ? 'bg-revolut-purple/25 text-white' : 'text-gray-400 hover:text-white' }}">
                     {{ __('common.spending') }}
                 </a>
-                <a href="{{ route('spending.index', ['period' => $period, 'tab' => 'budget']) }}"
+                <a href="{{ route('spending.index', array_filter(['period' => $period, 'tab' => 'budget', 'budget_id' => $selectedBudget?->id])) }}"
                    class="rounded-md px-4 py-2 text-sm font-medium transition-colors {{ $tab === 'budget' ? 'bg-revolut-purple/25 text-white' : 'text-gray-400 hover:text-white' }}">
                     {{ __('common.budget') }}
                 </a>
             </div>
         </div>
+
+        @if($tab === 'budget' && isset($budgets) && $budgets->isNotEmpty())
+        <div class="mb-4 overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/40 shadow-sm shadow-black/10 ring-1 ring-white/5">
+            <div class="flex flex-col gap-4 p-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5 sm:p-5">
+                <div class="min-w-0 flex-1">
+                    @if($budgets->count() > 1)
+                        <label for="spendingBudgetSelector" class="mb-2 block text-xs font-medium text-gray-400">
+                            {{ __('common.select_budget') }}
+                        </label>
+                        <div class="relative">
+                            <select id="spendingBudgetSelector"
+                                    onchange="window.location.href='{{ route('spending.index', ['tab' => 'budget', 'period' => $period]) }}&budget_id=' + this.value"
+                                    class="w-full appearance-none rounded-lg border border-slate-600/60 bg-slate-900/60 py-2.5 pl-3 pr-10 text-sm text-white shadow-inner shadow-black/10 transition-colors focus:border-revolut-purple/50 focus:outline-none focus:ring-2 focus:ring-revolut-purple/40">
+                                @foreach($budgets as $budget)
+                                    <option value="{{ $budget->id }}" {{ isset($selectedBudget) && $selectedBudget->id === $budget->id ? 'selected' : '' }}>
+                                        {{ $budget->display_label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <svg class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    @elseif(isset($selectedBudget))
+                        <p class="text-xs font-medium text-gray-500">{{ __('common.budget') }}</p>
+                        <p class="mt-1 truncate text-sm font-semibold text-white">{{ $selectedBudget->display_label }}</p>
+                    @endif
+                </div>
+                <a href="{{ route('budgets.index', $selectedBudget ? ['budget_id' => $selectedBudget->id] : []) }}"
+                   class="inline-flex w-full shrink-0 items-center justify-center gap-1.5 rounded-lg border border-revolut-purple/35 bg-revolut-purple/15 px-4 py-2.5 text-sm font-semibold text-revolut-purple-light transition-colors hover:border-revolut-purple/50 hover:bg-revolut-purple/25 sm:w-auto">
+                    <span>{{ __('common.spending_budget_full_overview') }}</span>
+                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        @endif
 
         <!-- Donut Chart Section -->
         <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 mb-6">
@@ -100,25 +140,27 @@
                 </ul>
                 @endif
 
-                <!-- Time Period Selector -->
+                @if($tab !== 'budget')
+                <!-- Time Period Selector (spending tab only) -->
                 <div class="flex items-center space-x-2">
-                    <a href="{{ route('spending.index', ['period' => '1w', 'tab' => $tab]) }}" 
+                    <a href="{{ route('spending.index', ['period' => '1w', 'tab' => $tab]) }}"
                        class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $period === '1w' ? 'bg-revolut-purple/20 text-white' : 'text-gray-400 hover:text-white hover:bg-slate-700/50' }}">
                         1 {{ app()->getLocale() === 'lv' ? 'ned.' : 'week' }}
                     </a>
-                    <a href="{{ route('spending.index', ['period' => '1m', 'tab' => $tab]) }}" 
+                    <a href="{{ route('spending.index', ['period' => '1m', 'tab' => $tab]) }}"
                        class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $period === '1m' ? 'bg-revolut-purple/20 text-white' : 'text-gray-400 hover:text-white hover:bg-slate-700/50' }}">
                         1 {{ app()->getLocale() === 'lv' ? 'mēn.' : 'month' }}
                     </a>
-                    <a href="{{ route('spending.index', ['period' => '6m', 'tab' => $tab]) }}" 
+                    <a href="{{ route('spending.index', ['period' => '6m', 'tab' => $tab]) }}"
                        class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $period === '6m' ? 'bg-revolut-purple/20 text-white' : 'text-gray-400 hover:text-white hover:bg-slate-700/50' }}">
                         6 {{ app()->getLocale() === 'lv' ? 'mēn.' : 'months' }}
                     </a>
-                    <a href="{{ route('spending.index', ['period' => '1y', 'tab' => $tab]) }}" 
+                    <a href="{{ route('spending.index', ['period' => '1y', 'tab' => $tab]) }}"
                        class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $period === '1y' ? 'bg-revolut-purple/20 text-white' : 'text-gray-400 hover:text-white hover:bg-slate-700/50' }}">
                         1 {{ app()->getLocale() === 'lv' ? 'g.' : 'year' }}
                     </a>
                 </div>
+                @endif
             </div>
         </div>
 

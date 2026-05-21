@@ -25,7 +25,7 @@ class BudgetPlannerController extends Controller
         ]);
 
         $income = $validated['income'];
-        $name = $validated['name'] ?? 'Budget '.Carbon::now()->format('M Y');
+        $name = $validated['name'] ?? Budget::defaultAutoName();
         $now = Carbon::now();
         $year = $now->year;
         $month = $now->month;

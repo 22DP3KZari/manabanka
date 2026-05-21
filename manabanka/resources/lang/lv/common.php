@@ -218,6 +218,7 @@ return [
     'budget' => 'Budžets',
     'select_budget' => 'Izvēlēties budžetu',
     'no_category_budgets_for_month' => 'Šim budžetam nav iestatītu kategoriju budžetu šim periodam.',
+    'spending_budget_full_overview' => 'Pilns budžeta pārskats',
 
     // Add spending form
     'add_spending' => 'Pievienot tēriņus',

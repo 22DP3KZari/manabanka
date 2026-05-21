@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budget;
 use App\Models\CategoryBudget;
 use App\Models\Spending;
 use Carbon\Carbon;
@@ -34,53 +35,78 @@ class SpendingController extends Controller
         };
 
         $userId = Auth::id();
+        $budgets = collect();
+        $selectedBudget = null;
+        $budgetMonthLabel = null;
 
         // Handle different tabs
         if ($tab === 'budget') {
-            // Get current month's budgets
-            $now = Carbon::now();
-            $categoryBudgets = CategoryBudget::where('user_id', $userId)
-                ->where('year', $now->year)
-                ->where('month', $now->month)
-                ->get();
+            $budgets = Budget::where('user_id', $userId)->orderByDesc('created_at')->get();
 
-            // Aggregate actual spending in SQL (avoids loading every row into PHP)
-            $spendingByCategory = Spending::query()
-                ->where('user_id', $userId)
-                ->whereYear('date', $now->year)
-                ->whereMonth('date', $now->month)
-                ->selectRaw('category, SUM(amount) as total_amount, COUNT(*) as cnt')
-                ->groupBy('category')
-                ->get()
-                ->keyBy('category')
-                ->map(fn ($row) => [
-                    'amount' => (float) $row->total_amount,
-                    'count' => (int) $row->cnt,
-                ]);
-
-            // Combine budgets with spending - key by category
-            $categoryData = [];
-            foreach ($categoryBudgets as $budget) {
-                $spendingInfo = $spendingByCategory->get($budget->category, ['amount' => 0, 'count' => 0]);
-                $actual = $spendingInfo['amount'];
-                $percentage = $budget->monthly_budget > 0 ? ($actual / $budget->monthly_budget) * 100 : 0;
-
-                $categoryData[$budget->category] = [
-                    'total' => $actual,
-                    'budget' => $budget->monthly_budget,
-                    'remaining' => $budget->monthly_budget - $actual,
-                    'percentage' => $percentage,
-                    'count' => $spendingInfo['count'],
-                    'status' => $percentage <= 80 ? 'on_track' : ($percentage <= 100 ? 'warning' : 'over_budget'),
-                ];
+            $requestedId = (int) $request->get('budget_id');
+            if ($requestedId && $budgets->contains('id', $requestedId)) {
+                session(['spending_selected_budget_id' => $requestedId]);
             }
 
-            // Sort by total descending
-            uasort($categoryData, function ($a, $b) {
-                return $b['total'] <=> $a['total'];
-            });
+            $sessionId = (int) session('spending_selected_budget_id');
+            $selectedBudget = $budgets->firstWhere('id', $sessionId) ?? $budgets->first();
 
-            $totalSpent = $spendingByCategory->sum(fn (array $row) => $row['amount']);
+            $categoryData = [];
+            $totalSpent = 0.0;
+
+            if ($selectedBudget) {
+                $periodAnchor = CategoryBudget::query()
+                    ->where('budget_id', $selectedBudget->id)
+                    ->orderByDesc('year')
+                    ->orderByDesc('month')
+                    ->first();
+
+                $budgetYear = $periodAnchor?->year ?? $selectedBudget->created_at->year;
+                $budgetMonth = $periodAnchor?->month ?? $selectedBudget->created_at->month;
+                $monthCarbon = Carbon::create($budgetYear, $budgetMonth, 1)->locale(app()->getLocale());
+                $monthName = mb_convert_case($monthCarbon->translatedFormat('F'), MB_CASE_TITLE, 'UTF-8');
+                $budgetMonthLabel = $monthName.' '.$budgetYear;
+
+                $categoryBudgets = CategoryBudget::where('user_id', $userId)
+                    ->where('budget_id', $selectedBudget->id)
+                    ->where('year', $budgetYear)
+                    ->where('month', $budgetMonth)
+                    ->get();
+
+                $spendingByCategory = Spending::query()
+                    ->where('user_id', $userId)
+                    ->whereYear('date', $budgetYear)
+                    ->whereMonth('date', $budgetMonth)
+                    ->selectRaw('category, SUM(amount) as total_amount, COUNT(*) as cnt')
+                    ->groupBy('category')
+                    ->get()
+                    ->keyBy('category')
+                    ->map(fn ($row) => [
+                        'amount' => (float) $row->total_amount,
+                        'count' => (int) $row->cnt,
+                    ]);
+
+                foreach ($categoryBudgets as $categoryBudget) {
+                    $spendingInfo = $spendingByCategory->get($categoryBudget->category, ['amount' => 0, 'count' => 0]);
+                    $actual = $spendingInfo['amount'];
+                    $percentage = $categoryBudget->monthly_budget > 0
+                        ? ($actual / $categoryBudget->monthly_budget) * 100
+                        : 0;
+
+                    $categoryData[$categoryBudget->category] = [
+                        'total' => $actual,
+                        'budget' => $categoryBudget->monthly_budget,
+                        'remaining' => $categoryBudget->monthly_budget - $actual,
+                        'percentage' => $percentage,
+                        'count' => $spendingInfo['count'],
+                        'status' => $percentage <= 80 ? 'on_track' : ($percentage <= 100 ? 'warning' : 'over_budget'),
+                    ];
+                }
+
+                uasort($categoryData, fn ($a, $b) => $b['total'] <=> $a['total']);
+
+                $totalSpent = $spendingByCategory->sum(fn (array $row) => $row['amount']);
+            }
         } else {
             $startStr = $startDate->format('Y-m-d');
             $endStr = $endDate->format('Y-m-d');
@@ -163,7 +189,10 @@ class SpendingController extends Controller
             'endDate',
             'period',
             'tab',
-            'categoryColors'
+            'categoryColors',
+            'budgets',
+            'selectedBudget',
+            'budgetMonthLabel'
         ));
     }
 

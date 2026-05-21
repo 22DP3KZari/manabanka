@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,5 +37,28 @@ class Budget extends Model
     public function categoryBudgets()
     {
         return $this->hasMany(CategoryBudget::class);
+    }
+
+    /** Default auto name (always Latvian), e.g. "maija budžets 2026 (21.05.2026)". */
+    public static function defaultAutoName(?Carbon $at = null): string
+    {
+        $at = ($at ?? now())->copy();
+        $genitiveMonths = [
+            1 => 'janvāra', 2 => 'februāra', 3 => 'marta', 4 => 'aprīļa', 5 => 'maija',
+            6 => 'jūnija', 7 => 'jūlija', 8 => 'augusta', 9 => 'septembra', 10 => 'oktobra',
+            11 => 'novembra', 12 => 'decembra',
+        ];
+
+        return sprintf(
+            '%s budžets %s (%s)',
+            $genitiveMonths[(int) $at->month],
+            $at->format('Y'),
+            $at->format('d.m.Y')
+        );
+    }
+
+    public function getDisplayLabelAttribute(): string
+    {
+        return $this->name ?: self::defaultAutoName($this->created_at);
     }
 } 

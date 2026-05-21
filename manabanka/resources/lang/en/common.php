@@ -218,6 +218,7 @@ return [
     'budget' => 'Budget',
     'select_budget' => 'Select Budget',
     'no_category_budgets_for_month' => 'This budget has no category budgets set for this period.',
+    'spending_budget_full_overview' => 'Full budget overview',
 
     // Add spending form
     'add_spending' => 'Add Spending',
