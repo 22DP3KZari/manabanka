@@ -75,6 +75,7 @@ class SpendingController extends Controller
 
                 $spendingByCategory = Spending::query()
                     ->where('user_id', $userId)
+                    ->where('budget_id', $selectedBudget->id)
                     ->whereYear('date', $budgetYear)
                     ->whereMonth('date', $budgetMonth)
                     ->selectRaw('category, SUM(amount) as total_amount, COUNT(*) as cnt')
