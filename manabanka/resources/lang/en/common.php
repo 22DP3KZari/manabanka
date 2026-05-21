@@ -31,7 +31,6 @@ return [
 
     // Login page
     'enter_passcode' => 'Enter passcode',
-    'not_you' => 'Not you?',
     'email_address' => 'Email address',
     'password' => 'Password',
     'caps_lock' => 'Caps',

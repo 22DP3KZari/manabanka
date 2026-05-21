@@ -60,13 +60,45 @@
         <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 mb-6">
             <div class="flex flex-col items-center">
                 <!-- Chart Container -->
-                <div class="relative w-64 h-64 mb-6">
+                <div class="relative w-64 h-64 mb-4">
                     <canvas id="spendingChart"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                         <div class="text-sm text-gray-400 mb-1">{{ __('common.spent') }}</div>
                         <div class="text-3xl font-bold text-white">€{{ number_format($totalSpent, 2, ',', '.') }}</div>
                     </div>
                 </div>
+
+                @if(!empty($chartCategoryData))
+                @php
+                    $chartCategoryLabels = [
+                        'dining_out' => __('common.category_dining_out'),
+                        'transportation' => __('common.category_transportation'),
+                        'groceries' => __('common.category_groceries'),
+                        'shopping' => __('common.category_shopping'),
+                        'entertainment' => __('common.category_entertainment'),
+                        'housing' => __('common.category_housing'),
+                        'utilities' => __('common.category_utilities'),
+                        'insurance' => __('common.category_insurance'),
+                        'loan_payments' => __('common.category_loan_payments'),
+                        'personal_care' => __('common.category_personal_care'),
+                        'subscriptions' => __('common.category_subscriptions'),
+                        'miscellaneous' => __('common.category_miscellaneous'),
+                    ];
+                @endphp
+                <ul class="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-6 max-w-lg px-2" aria-label="{{ __('common.category_budgets') }}">
+                    @foreach($chartCategoryData as $category => $row)
+                        @php
+                            $legendColor = $categoryColors[$category] ?? '#6B7280';
+                            $legendLabel = $chartCategoryLabels[$category] ?? ucfirst(str_replace('_', ' ', $category));
+                            $legendPct = $totalSpent > 0 ? round(abs($row['total']) / $totalSpent * 100) : 0;
+                        @endphp
+                        <li class="flex items-center gap-2 text-xs text-gray-300">
+                            <span class="h-2.5 w-2.5 shrink-0 rounded-full" style="background-color: {{ $legendColor }}"></span>
+                            <span>{{ $legendLabel }} <span class="text-gray-500">({{ $legendPct }}%)</span></span>
+                        </li>
+                    @endforeach
+                </ul>
+                @endif
 
                 <!-- Time Period Selector -->
                 <div class="flex items-center space-x-2">
@@ -275,6 +307,10 @@ document.addEventListener('DOMContentLoaded', function() {
         backgroundColors.push(color + '80');
     });
 
+    if (data.length === 0) {
+        return;
+    }
+
     new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -299,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     callbacks: {
                         label: function(context) {
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : '0';
                             return context.label + ': €' + context.parsed.toFixed(2) + ' (' + percentage + '%)';
                         }
                     }

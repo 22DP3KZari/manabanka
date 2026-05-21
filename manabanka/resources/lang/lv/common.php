@@ -31,7 +31,6 @@ return [
 
     // Login page
     'enter_passcode' => 'Ievadiet piekļuves kodu',
-    'not_you' => 'Nav jūs?',
     'email_address' => 'E-pasta adrese',
     'password' => 'Parole',
     'caps_lock' => 'Caps',
@@ -171,10 +170,10 @@ return [
     'etf_calc_total_savings' => 'Kopējie uzkrājumi',
     'etf_calc_table_title' => 'Prognoze pa gadiem',
     'etf_calc_table_year' => 'Gads',
-    'etf_calc_table_start' => 'Atlikums gada sākumā',
+    'etf_calc_table_start' => 'Bilance gada sākumā',
     'etf_calc_table_contributions' => 'Iemaksas',
     'etf_calc_table_returns' => 'Atdeve',
-    'etf_calc_table_end' => 'Atlikums gada beigās',
+    'etf_calc_table_end' => 'Bilance gada beigās',
     'etf_calc_disclaimer' => 'Rezultāti ir tikai aprēķini. Pagātnes peļņa negarantē nākotnes atdevi. Nav ieguldījumu padoms.',
 
     // Spending interface
@@ -197,7 +196,7 @@ return [
     'category_personal_care' => 'Personīgā aprūpe',
     'category_subscriptions' => 'Abonementi',
     'category_dining_out' => 'Ēšana ārpus mājām',
-    'category_transportation' => 'Transportēšana',
+    'category_transportation' => 'Transports',
     'category_miscellaneous' => 'Dažādi',
     'no_spending_data' => 'Nav pieejami tēriņu dati',
     'add_transactions_to_see_data' => 'Pievienojiet darījumus, lai redzētu savu tēriņu sadalījumu',

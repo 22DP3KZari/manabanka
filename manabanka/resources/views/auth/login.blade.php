@@ -53,7 +53,6 @@
                         </div>
                         <div class="text-left">
                             <p class="text-white font-medium text-base">{{ old('email') }}</p>
-                            <a href="#" class="text-revolut-purple hover:text-revolut-purple-light text-sm transition-colors">{{ __('common.not_you') }}</a>
                         </div>
                     </div>
                 @endif
