@@ -16,7 +16,7 @@ return new class extends Migration
             // Constraint might not exist or have different name, try alternative
             try {
                 Schema::table('category_budgets', function (Blueprint $table) {
-                    $table->dropUnique(['user_id', 'category', 'year', 'month']);
+                    // $table->dropUnique(['user_id', 'category', 'year', 'month']);
                 });
             } catch (\Exception $e2) {
                 // If both fail, the constraint might already be removed
@@ -38,7 +38,7 @@ return new class extends Migration
         // Re-add the old constraint if needed
         try {
             Schema::table('category_budgets', function (Blueprint $table) {
-                $table->dropUnique(['budget_id', 'category', 'year', 'month']);
+                // $table->dropUnique(['budget_id', 'category', 'year', 'month']);
                 $table->unique(['user_id', 'category', 'year', 'month']);
             });
         } catch (\Exception $e) {
