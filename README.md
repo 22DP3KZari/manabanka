@@ -4,16 +4,14 @@
 
 ## Projekta apraksts
 
-Šī ir tīmekļa lietotne personīgo finanšu pārvaldībai un izsekošanai. Lietotne ļauj lietotājiem veidot budžeta plānus, analizēt tēriņu paradumus, kā arī pārskatīt finanšu statistiku.
+Šī ir tīmekļa lietotne budžeta plānošanai un finanšu paradumu uzlabošanai. Lietotne ļauj lietotājiem veidot budžeta plānus, analizēt tēriņu paradumus, kā arī pārskatīt finanšu statistiku.
+## Aktuālās funkcionalitātes
 
-## Galvenās funkcionalitātes
-
-- Ienākumu un izdevumu pievienošana, rediģēšana un dzēšana
-- Budžeta plānošana balstīta pēc lietotāja paradumiem un tēriņiem
-- Bilances un statistikas apskate (chart)
-- Lietotāja pievienošana/autentifikācija
-- Datu eksportēšana
-- Drošības un privātuma aizsardzība
+- Tēriņu pievienošana, rediģēšana un dzēšana pēc kategorijām
+- Budžeta plāna izveide ar ikmēneša ienākumu un kategoriju limitiem
+- Budžeta salīdzinājums ar faktiskajiem tēriņiem
+- Tēriņu un budžeta vizualizācija
+- Padomi un lasāmviela finanšu pamatu izzināšanai
 
 ## Uzstādīšana
 
